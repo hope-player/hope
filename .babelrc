@@ -1,5 +1,5 @@
 {
-  "plugins": ["flow-react-proptypes", "transform-decorators-legacy"],
+  "plugins": ["flow-react-proptypes", "transform-decorators-legacy", "transform-class-properties"],
   "presets": ["es2015-node6", "react"],
   "sourceMaps": "both"
 }
