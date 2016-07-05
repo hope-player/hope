@@ -1,5 +1,5 @@
 module.exports = {
-  entry: './src/index.jsx',
+  entry: ['bootstrap-loader', './src/index.jsx'],
   output: {
     path: './dist',
     publicPath: '/src/',
@@ -17,7 +17,8 @@ module.exports = {
       test: /\.jsx?$/,
       exclude: /node_modules/,
       loader: 'babel-loader',
-    }],
+    },
+    { test: /\.css$/, loader: 'style-loader!css-loader' }],
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],

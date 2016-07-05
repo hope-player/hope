@@ -1,0 +1,6 @@
+.library-view {
+  max-width: 500px;
+}
+.library-view-item > .library-view {
+  margin-left: 10px;
+}
