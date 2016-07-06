@@ -37,9 +37,13 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-# Babel build files
+# BUild files
 dist
+bin
 
 # Visual Studio Code files
 .vscode
 jsconfig.json
+
+# IntelliJ IDEA files
+.idea

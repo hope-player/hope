@@ -1,6 +1,9 @@
 .library-view {
-  max-width: 500px;
+  outline: 1px solid black;
+  height: 100%;
 }
-.library-view-item > .library-view {
-  margin-left: 10px;
+
+.library-view-item {
+  padding-left: 10px;
+  outline: 1px solid black;
 }

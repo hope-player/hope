@@ -11,7 +11,7 @@ export type NodeType = {
 
 export const LibraryState : NodeType = observable({
   id: '1',
-  type: 'root',
+  type: 'library',
   children: [{
     id: 2,
     type: 'artist',
@@ -43,6 +43,6 @@ export const LibraryState : NodeType = observable({
       },
     }],
   @computed get component() : (key : string) => React.Element {
-    return (key : string) : React.Element => <b key={key}>root</b>;
+    return (key : string) : React.Element => <b key={key}>Library 1</b>;
   },
 });

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Panel } from 'react-bootstrap';
+import { NavItem } from 'rebass';
 
 import { NodeType } from '../state/LibraryState';
 
@@ -30,15 +30,12 @@ type LibraryViewItemProps = {
     const { node, isExpanded } = this.props;
     return (
       <div className={"library-view-item"} key={`li_${node.id}`}>
-        {
-          <div className={"list-group-item"}>
-            {
-              node.component(`node_${node.id}`)
-            }
-            <a onClick={this.toggle}>+</a>
-          </div>
-        }
-        <div className={"library-view"} key={`ul_${node.id}`}>
+        <div className={"library-view-header"}>
+          <a onClick={this.toggle}>+</a>
+          {
+            node.component(`node_${node.id}`)
+          }
+        </div>
         {
           node.children.map((child : NodeType) : React.Component => {
             if (isExpanded(node.id.toString())) {
@@ -50,10 +47,8 @@ type LibraryViewItemProps = {
                   isExpanded={isExpanded}
                 />);
             }
-            return null;
           })
         }
-        </div>
       </div>
     );
   }

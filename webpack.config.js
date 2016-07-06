@@ -1,5 +1,5 @@
 module.exports = {
-  entry: ['bootstrap-loader', './src/index.jsx'],
+  entry: ['./src/index.jsx'],
   output: {
     path: './dist',
     publicPath: '/src/',
