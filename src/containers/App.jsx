@@ -13,7 +13,7 @@ import '../styles/main.css';
   constructor(props) {
     super(props);
     this.api = new Api();
-    this.api.getLibrary();
+    this.api.initLibrary();
   }
   render() {
     return (

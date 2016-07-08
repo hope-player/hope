@@ -1,10 +1,13 @@
 import lVState from '../state/LibraryViewState';
 
 export default class Api {
-  getLibrary() {
-    console.log('fetching');
-    fetch('http://localhost:5000')
+  initLibrary() {
+    fetch('http://127.0.0.1:5000/available_sources')
       .then(response => response.json())
-      .then(source => { lVState.addSource(source); });
+      .then(sources => {
+        sources.forEach(source => fetch(`http://127.0.0.1:5000/library/${source}`)
+          .then(response => response.json())
+          .then(library => lVState.addSource(source, library)));
+      });
   }
 }

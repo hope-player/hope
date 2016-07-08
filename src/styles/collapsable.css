@@ -1,5 +1,6 @@
 .library-view {
   height: calc(100vh - 150px);
+  width: calc(100vw / 3);
   overflow-y: scroll;
 }
 
@@ -9,6 +10,5 @@
 }
 
 .library-view-item-header {
-  border: 1px solid black;
   font-size: 24px;
 }

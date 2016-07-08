@@ -31,7 +31,7 @@ class LibraryViewState {
     return (id) => this.expanded.has(id);
   }
 
-  @action addSource(source) {
+  @action addSource(name, source) {
     const newRoot = this.root.withMutations(root => {
       const children = new Immutable.Map().withMutations(mChildren => {
         for (const artist of source) {
@@ -52,19 +52,19 @@ class LibraryViewState {
                         type: 'track',
                         name: track.title,
                         children: new Immutable.Map(),
-                      }));
-                    }
-                  }),
-                }));
-              }
-            }),
+                      }));  // SO MANY
+                    }  // PARENTHESES
+                  }),  // ARE
+                }));  // TOO UGLY
+              }  // FOR
+            }),  // MY EYES
           }));
         }
       });
 
       root.setIn(['children', ++this.last_id], new Immutable.Map({
         id: this.last_id,
-        name: 'gmusic',
+        name: name,
         type: 'source',
         children,
       }));
