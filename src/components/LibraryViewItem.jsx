@@ -1,53 +1,61 @@
 // @flow
 import React from 'react';
 import { observer } from 'mobx-react';
-import { NavItem } from 'rebass';
 
-import { NodeType } from '../state/LibraryState';
-
-type LibraryViewItemProps = {
-  toggle: (id : string) => void,
-  isExpanded: (id : string) => boolean,
-  node: NodeType,
-}
 
 @observer export class LibraryViewItem extends React.Component {
-  constructor(props : LibraryViewItemProps) {
+  constructor(props) {
     super(props);
     this.toggle = this.toggle.bind(this);
-    this.state = {
-      expanded: new Set('1'),
-    };
   }
 
-  props: LibraryViewItemProps
-
   toggle() {
-    this.props.toggle(this.props.node.id.toString());
+    this.props.toggle(this.props.node.get('id'));
+  }
+
+  renderChildren() {
+    const { node, isExpanded, toggle } = this.props;
+    const result = [];
+    if (isExpanded(node.get('id'))) {
+      node.get('children').map(child => {
+        result.push(
+          <LibraryViewItem
+            node={child}
+            toggle={toggle}
+            isExpanded={isExpanded}
+          />);
+      });
+    }
+    return result;
+  }
+
+  renderExpand() {
+    const { node, isExpanded, toggle } = this.props;
+    let result = null;
+    if (node.get('children').size) {
+      if (isExpanded(node.get('id'))) {
+        result = <a onClick={this.toggle}>-</a>;
+      } else {
+        result = <a onClick={this.toggle}>+</a>;
+      }
+    }
+    return result;
   }
 
   render() : React.Element {
-    const { node, isExpanded } = this.props;
+    const { node } = this.props;
     return (
-      <div className={"library-view-item"} key={`li_${node.id}`}>
-        <div className={"library-view-header"}>
-          <a onClick={this.toggle}>+</a>
+      <div className={"library-view-item"}>
+        <div className={"library-view-item-header"}>
           {
-            node.component(`node_${node.id}`)
+            this.renderExpand()
+          }
+          {
+            node.get('name')
           }
         </div>
         {
-          node.children.map((child : NodeType) : React.Component => {
-            if (isExpanded(node.id.toString())) {
-              return (
-                <LibraryViewItem
-                  node={child}
-                  key={child.id}
-                  toggle={this.props.toggle}
-                  isExpanded={isExpanded}
-                />);
-            }
-          })
+          this.renderChildren()
         }
       </div>
     );

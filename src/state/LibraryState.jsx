@@ -1,48 +1,52 @@
-// @flow
-import React from 'react';
-import { observable, computed } from 'mobx';
+import { observable, action, autorun } from 'mobx';
+import Immutable from 'immutable';
 
-export type NodeType = {
-  id: string,
-  type: string,
-  children: Node[],
-  component: (key : string) => React.Component;
+class LibraryState {
+  @observable root;
+  last_id;
+
+  constructor() {
+    this.last_id = 1;
+    this.root = new Immutable.Map({
+      id: this.last_id++,
+      name: 'Library root',
+      type: 'root',
+      children: new Immutable.Map({ test: new Immutable.Map({
+        id: this.last_id++,
+        name: 'Test',
+        type: 'source',
+        children: new Immutable.Map(),
+      }) }),
+    });
+    autorun(() => {
+      console.log(this.last_id);
+      console.log(this.root);
+    });
+  }
+
+  @action addSource(source) {
+    const newRoot = this.root.withMutations(root => {
+      const children = new Immutable.Map().withMutations(mChildren => {
+        for (let artist of source) {
+          mChildren.set(artist.name, new Immutable.Map({
+            id: this.last_id++,
+            type: 'artist',
+            name: artist.name,
+            children: new Immutable.Map(),
+          }));
+        }
+      });
+
+      root.setIn(['children', 'source'], new Immutable.Map({
+        id: this.last_id++,
+        name: 'source',
+        type: 'source',
+        children,
+      }));
+    });
+    this.root = newRoot;
+  }
 }
 
-export const LibraryState : NodeType = observable({
-  id: '1',
-  type: 'library',
-  children: [{
-    id: 2,
-    type: 'artist',
-    children: [],
-    @computed get component() : (key : string) => React.Element {
-      return (key : string) : React.Component => <span key={key}>artist 1</span>;
-    },
-  },
-    {
-      id: '3',
-      type: 'artist',
-      children: [{
-        id: '4',
-        type: 'album',
-        children: [{
-          id: '5',
-          type: 'track',
-          children: [],
-          @computed get component() : (key : string) => React.Element {
-            return (key : string) : React.Element => <span key={key}>track</span>;
-          },
-        }],
-        @computed get component() : (key : string) => React.Element {
-          return (key : string) : React.Element => <span key={key}>album</span>;
-        },
-      }],
-      @computed get component() : (key : string) => React.Component {
-        return (key : string) : React.Element => <span key={key}>artist 2</span>;
-      },
-    }],
-  @computed get component() : (key : string) => React.Element {
-    return (key : string) : React.Element => <b key={key}>Library 1</b>;
-  },
-});
+const singleton = new LibraryState();
+export default singleton;

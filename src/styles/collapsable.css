@@ -1,9 +1,14 @@
 .library-view {
-  outline: 1px solid black;
-  height: 100%;
+  height: calc(100vh - 150px);
+  overflow-y: scroll;
 }
 
 .library-view-item {
-  padding-left: 10px;
-  outline: 1px solid black;
+  padding-left: 20px;
+  overflow-y: hidden;
+}
+
+.library-view-item-header {
+  border: 1px solid black;
+  font-size: 24px;
 }
