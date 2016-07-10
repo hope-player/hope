@@ -23,6 +23,9 @@ import '../styles/main.css';
   render() {
     return (
       <Grid className="fill-screen">
+        <Row className="app-bar">
+          <h2>hope</h2> <i> (dev version)</i>
+        </Row>
         <Row className="main">
           <Col md={3}>
             <LibraryView

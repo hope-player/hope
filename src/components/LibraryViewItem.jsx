@@ -47,9 +47,11 @@ import { observer } from 'mobx-react';
     return (
       <div className={"library-view-item"}>
         <div className={"library-view-item-header"}>
-          {
-            this.renderExpand()
-          }
+          <div className="library-view-item-text">
+            {
+              this.renderExpand()
+            }
+          </div>
           {
             node.get('name')
           }
