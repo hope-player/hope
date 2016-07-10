@@ -7,7 +7,8 @@
     "init": "sh scripts/init.sh",
     "start": "sh scripts/start.sh",
     "build": "sh scripts/build.sh",
-    "watch": "sh scripts/watch.sh"
+    "watch": "sh scripts/watch.sh",
+    "start-backend": "sh scripts/start-backend.sh"
   },
   "keywords": [],
   "author": "Jan Suchomel",
