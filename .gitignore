@@ -47,3 +47,7 @@ jsconfig.json
 
 # IntelliJ IDEA files
 .idea
+
+
+# Files not yet ready to be commited
+backend
