@@ -13,6 +13,8 @@
   "author": "Jan Suchomel",
   "license": "GPL-3.0",
   "dependencies": {
+    "classnames": "^2.2.5",
+    "flexboxgrid": "^6.3.0",
     "immutable": "^3.8.1",
     "mobx": "^2.3.4",
     "mobx-react": "^3.4.0",
@@ -20,6 +22,7 @@
     "react": "^15.2.0",
     "react-addons-shallow-compare": "^15.2.0",
     "react-dom": "^15.2.0",
+    "react-flexbox-grid": "^0.9.6",
     "react-virtualized": "^7.11.7",
     "rebass": "^0.3.0",
     "reflexbox": "^1.1.3"

@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Flex, Box } from 'reflexbox';
+import { Grid, Row, Col } from 'react-flexbox-grid';
 import 'normalize.css';
 
 import LibraryView from '../components/LibraryView';
@@ -22,28 +22,26 @@ import '../styles/main.css';
   }
   render() {
     return (
-      <Flex column>
-        <Box className={"main"} auto>
-          <Flex align={'stretch'}>
-            <Box className="fill-height" auto>
-              <LibraryView
-                root={lVState.root}
-                toggle={lVState.toggle}
-                isExpanded={lVState.isExpanded}
-              />
-            </Box>
-            <Box px={2} auto>
-              <QueueView />
-            </Box>
-            <Box px={2} auto>
-              <InfoView />
-            </Box>
-          </Flex>
-        </Box>
-        <Box auto>
+      <Grid className="fill-screen">
+        <Row className="main">
+          <Col md={3}>
+            <LibraryView
+              root={lVState.root}
+              toggle={lVState.toggle}
+              isExpanded={lVState.isExpanded}
+            />
+          </Col>
+          <Col md={6}>
+            <QueueView />
+          </Col>
+          <Col md={3}>
+            <InfoView />
+          </Col>
+        </Row>
+        <Row>
           <PlayerView />
-        </Box>
-      </Flex>
+        </Row>
+      </Grid>
     );
   }
 }
