@@ -4,7 +4,12 @@ import { Flex, Box } from 'reflexbox';
 import 'normalize.css';
 
 import LibraryView from '../components/LibraryView';
+import QueueView from '../components/QueueView';
+import InfoView from '../components/InfoView';
+import PlayerView from '../components/PlayerView';
+
 import lVState from '../state/LibraryViewState';
+
 import Api from '../api/api';
 
 import '../styles/main.css';
@@ -17,16 +22,27 @@ import '../styles/main.css';
   }
   render() {
     return (
-      <Flex className={"fill-height"} align={'stretch'}>
-        <Box className="fill-height" px={2} auto>
-          <LibraryView
-            root={lVState.root}
-            toggle={lVState.toggle}
-            isExpanded={lVState.isExpanded}
-          />
+      <Flex column>
+        <Box className={"main"} auto>
+          <Flex align={'stretch'}>
+            <Box className="fill-height" auto>
+              <LibraryView
+                root={lVState.root}
+                toggle={lVState.toggle}
+                isExpanded={lVState.isExpanded}
+              />
+            </Box>
+            <Box px={2} auto>
+              <QueueView />
+            </Box>
+            <Box px={2} auto>
+              <InfoView />
+            </Box>
+          </Flex>
         </Box>
-        <Box px={2} auto />
-        <Box px={2} auto />
+        <Box auto>
+          <PlayerView />
+        </Box>
       </Flex>
     );
   }
