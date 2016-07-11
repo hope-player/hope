@@ -73,12 +73,13 @@ body {
   height:100%;
 }
 
-.queue-view {
+.playlist-view {
   height:100%;
 }
 
 .player-view {
   height: 150px;
+  margin-left: 15px;
 }
 
 .app-bar {

@@ -4,7 +4,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import 'normalize.css';
 
 import LibraryView from '../components/LibraryView';
-import QueueView from '../components/QueueView';
+import PlayListView from '../components/PlayListView';
 import InfoView from '../components/InfoView';
 import PlayerView from '../components/PlayerView';
 
@@ -35,7 +35,7 @@ import '../styles/main.css';
             />
           </Col>
           <Col md={6}>
-            <QueueView />
+            <PlayListView />
           </Col>
           <Col md={3}>
             <InfoView />
