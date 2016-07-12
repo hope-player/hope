@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "author": "Jan Suchomel",
-  "license": "GPL-3.0",
+  "license": "AGPL-3.0",
   "dependencies": {
     "classnames": "^2.2.5",
     "flexboxgrid": "^6.3.0",
