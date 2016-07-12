@@ -1,6 +1,7 @@
 // @flow
 import { observable, action, computed } from 'mobx';
 import Immutable from 'immutable';
+import R from 'ramda';
 
 class LibraryViewState {
   @observable expanded : Immutable.Set;
@@ -34,21 +35,24 @@ class LibraryViewState {
   @action addSource(name, source) {
     const newRoot = this.root.withMutations(root => {
       const children = new Immutable.Map().withMutations(mChildren => {
-        for (const artist of source) {
+        for (const artist of R.values(source)) {
           mChildren.set(++this.last_id, new Immutable.Map({
             id: this.last_id,
+            global_id: artist.artistID,
             type: 'artist',
             name: artist.name,
             children: new Immutable.Map().withMutations(mAlbums => {
-              for (const album of artist.albums) {
+              for (const album of R.values(artist.albums)) {
                 mAlbums.set(++this.last_id, new Immutable.Map({
                   id: this.last_id,
+                  global_id: artist.albumID,
                   type: 'album',
                   name: album.name,
                   children: new Immutable.Map().withMutations(mTracks => {
-                    for (const track of album.tracks) {
+                    for (const track of R.values(album.tracks)) {
                       mTracks.set(++this.last_id, new Immutable.Map({
                         id: this.last_id,
+                        global_id: artist.trackID,
                         type: 'track',
                         name: track.title,
                         children: new Immutable.Map(),
