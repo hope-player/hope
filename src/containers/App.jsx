@@ -38,14 +38,20 @@ import '../styles/icons.css';
             />
           </Col>
           <Col md={6}>
-            <PlayListView playlist={pState.playlist} />
+            <PlayListView
+              playlist={pState.playlist}
+              updateNowPlaying={pState.updateNowPlaying}
+            />
           </Col>
           <Col md={3}>
-            <InfoView />
+            <InfoView currentTrack={pState.currentTrack} />
           </Col>
         </Row>
         <Row>
-          <PlayerView />
+          <PlayerView
+            playerState={pState.state}
+            currentTrack={pState.currentTrack}
+          />
         </Row>
       </Grid>
     );
