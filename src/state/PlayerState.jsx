@@ -3,12 +3,14 @@ import Immutable from 'immutable';
 
 class PlayListViewState {
   @observable playlist : Immutable.List;
-  @observable nowPlaying : number;
+  @observable nowPlaying : Number;
   @observable state : string;
 
   constructor() {
+    this.play = this.play.bind(this);
     this.playlist = new Immutable.List();
     this.string = 'stopped';
+    this.nowPlaying = -1;
     this.addToPlayList = this.addToPlayList.bind(this);
   }
 
@@ -16,11 +18,11 @@ class PlayListViewState {
     return this.playlist.get(this.index);
   }
 
-  @action addToPlayList(node) {
-    this.playlist = this.playlist.push(node);
+  @action addToPlayList(track) {
+    this.playlist = this.playlist.push(track);
   }
 
-  @action updateNowPlaying(index : number) {
+  @action play(index : number) {
     this.nowPlaying = index;
   }
 }

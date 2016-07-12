@@ -1,13 +1,13 @@
 import React from 'react';
 
-export default ({ playlist }) => {
+import PlayListViewItem from './PlayListViewItem';
+
+export default ({ playlist, play }) => {
   return (
     <div className={"playlist-view"}>
       {
-        playlist.map(item =>
-          <div className="playlist-item" key={`pl-item_${item.get('id')}`}>
-            {item.get('artist')} - {item.get('album')} - {item.get('name')}
-          </div>
+        playlist.map((item, index) =>
+          <PlayListViewItem track={item} play={play} index={index} />
         )
       }
     </div>
