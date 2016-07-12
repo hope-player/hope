@@ -9,7 +9,7 @@ import InfoView from '../components/InfoView';
 import PlayerView from '../components/PlayerView';
 
 import lVState from '../state/LibraryViewState';
-import pVState from '../state/PlayListViewState';
+import pState from '../state/PlayerState';
 
 import Api from '../api/api';
 
@@ -34,11 +34,11 @@ import '../styles/icons.css';
               root={lVState.root}
               toggle={lVState.toggle}
               isExpanded={lVState.isExpanded}
-              addToPlayList={pVState.addToPlayList}
+              addToPlayList={pState.addToPlayList}
             />
           </Col>
           <Col md={6}>
-            <PlayListView playlist={pVState.playlist} />
+            <PlayListView playlist={pState.playlist} />
           </Col>
           <Col md={3}>
             <InfoView />
