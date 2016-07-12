@@ -9,10 +9,12 @@ import InfoView from '../components/InfoView';
 import PlayerView from '../components/PlayerView';
 
 import lVState from '../state/LibraryViewState';
+import pVState from '../state/PlayListViewState';
 
 import Api from '../api/api';
 
 import '../styles/main.css';
+import '../styles/icons.css';
 
 @observer export default class App extends React.Component {
   constructor(props) {
@@ -32,6 +34,7 @@ import '../styles/main.css';
               root={lVState.root}
               toggle={lVState.toggle}
               isExpanded={lVState.isExpanded}
+              addToPlayList={pVState.addToPlayList}
             />
           </Col>
           <Col md={6}>

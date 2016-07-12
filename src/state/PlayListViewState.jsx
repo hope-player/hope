@@ -1,37 +1,18 @@
-// @flow
-import { observable, action, computed } from 'mobx';
+import { observable, action } from 'mobx';
 import Immutable from 'immutable';
 
-class LibraryViewState {
-  @observable queue : Immutable.List;
+class PlayListViewState {
+  @observable playlist : Immutable.List;
 
   constructor() {
-    this.toggle = this.toggle.bind(this);
-    this.last_id = 0;
-    this.expanded = new Immutable.Set([1]);
-    this.root = new Immutable.Map({
-      id: this.last_id,
-      name: 'Library',
-      type: 'root',
-      children: new Immutable.Map(),
-    });
+    this.playlist = new Immutable.List();
+    this.addToPlayList = this.addToPlayList.bind(this);
   }
 
-  @action toggle(id : number) {
-    if (this.expanded.has(id)) {
-      this.expanded = this.expanded.delete(id);
-    } else {
-      this.expanded = this.expanded.add(id);
-    }
-  }
-
-  @computed get isExpanded() {
-    return (id) => this.expanded.has(id);
-  }
-
-  @action addTrack(track) {
+  @action addToPlayList(node) {
+    this.playlist.push(node);
   }
 }
 
-const singleton = new LibraryViewState();
+const singleton = new PlayListViewState();
 export default singleton;

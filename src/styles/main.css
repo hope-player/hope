@@ -86,3 +86,11 @@ body {
   height: 50px;
   padding-left: 15px;
 }
+
+.playlist-add {
+  display: none;
+}
+
+.library-view-item-header:hover .playlist-add {
+  display: inline;
+}

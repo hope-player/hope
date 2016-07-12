@@ -20,7 +20,7 @@ class LibraryViewState {
     });
   }
 
-  @action toggle(id : number) {
+  @action toggle(id : string) {
     if (this.expanded.has(id)) {
       this.expanded = this.expanded.delete(id);
     } else {
@@ -40,20 +40,23 @@ class LibraryViewState {
             id: this.last_id,
             global_id: artist.artistID,
             type: 'artist',
+            source: name,
             name: artist.name,
             children: new Immutable.Map().withMutations(mAlbums => {
               for (const album of R.values(artist.albums)) {
                 mAlbums.set(++this.last_id, new Immutable.Map({
                   id: this.last_id,
-                  global_id: artist.albumID,
+                  global_id: album.albumID,
                   type: 'album',
+                  source: name,
                   name: album.name,
                   children: new Immutable.Map().withMutations(mTracks => {
                     for (const track of R.values(album.tracks)) {
                       mTracks.set(++this.last_id, new Immutable.Map({
                         id: this.last_id,
-                        global_id: artist.trackID,
+                        global_id: track.trackID,
                         type: 'track',
+                        source: name,
                         name: track.title,
                         children: new Immutable.Map(),
                       }));  // SO MANY

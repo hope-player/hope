@@ -5,7 +5,6 @@ module.exports = {
     publicPath: '/src/',
     filename: 'app.js',
   },
-  cache: true,
   debug: true,
   devtool: 'source-map',
   stats: {
@@ -27,6 +26,14 @@ module.exports = {
       test: /\.css$/,
       loader: 'style!css?modules',
       include: /flexboxgrid/,
+    },
+    {
+      test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+      loader: 'url-loader?limit=100000',
+    },
+    {
+      test: /\.jpg$/,
+      loader: 'file-loader',
     }],
   },
   resolve: {

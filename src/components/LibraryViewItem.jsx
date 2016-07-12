@@ -2,19 +2,33 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
-
 @observer export class LibraryViewItem extends React.Component {
   constructor(props) {
     super(props);
     this.toggle = this.toggle.bind(this);
+    this.addToPlayList = this.addToPlayList.bind(this);
   }
 
   toggle() {
     this.props.toggle(this.props.node.get('id'));
   }
 
+  addToPlayList() {
+    this.addNodeToPlayList(this.props.node);
+  }
+
+  addNodeToPlayList(node) {
+    if (node.get('type') === 'track') {
+      this.props.addToPlayList(node);
+    } else if (node.get('children').size) {
+      node.get('children').forEach(child => {
+        this.addNodeToPlayList(child);
+      });
+    }
+  }
+
   renderChildren() {
-    const { node, isExpanded, toggle } = this.props;
+    const { node, isExpanded, toggle, addToPlayList } = this.props;
     const result = [];
     if (isExpanded(node.get('id'))) {
       node.get('children').map(child => {
@@ -23,6 +37,7 @@ import { observer } from 'mobx-react';
             node={child}
             toggle={toggle}
             isExpanded={isExpanded}
+            addToPlayList={addToPlayList}
           />);
       });
     }
@@ -34,9 +49,9 @@ import { observer } from 'mobx-react';
     let result = null;
     if (node.get('children').size) {
       if (isExpanded(node.get('id'))) {
-        result = <a onClick={this.toggle}>-</a>;
+        result = <a className="icon-expand_less" onClick={this.toggle} />;
       } else {
-        result = <a onClick={this.toggle}>+</a>;
+        result = <a className="icon-expand_more" onClick={this.toggle} />;
       }
     }
     return result;
@@ -55,6 +70,7 @@ import { observer } from 'mobx-react';
           {
             node.get('name')
           }
+          <a className="icon-add playlist-add" onClick={this.addToPlayList} />
         </div>
         {
           this.renderChildren()
