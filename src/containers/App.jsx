@@ -38,7 +38,7 @@ import '../styles/icons.css';
             />
           </Col>
           <Col md={6}>
-            <PlayListView />
+            <PlayListView playlist={pVState.playlist} />
           </Col>
           <Col md={3}>
             <InfoView />

@@ -10,7 +10,7 @@ class PlayListViewState {
   }
 
   @action addToPlayList(node) {
-    this.playlist.push(node);
+    this.playlist = this.playlist.push(node);
   }
 }
 

@@ -50,6 +50,7 @@ class LibraryViewState {
                   type: 'album',
                   source: name,
                   name: album.name,
+                  artist: artist.name,
                   children: new Immutable.Map().withMutations(mTracks => {
                     for (const track of R.values(album.tracks)) {
                       mTracks.set(++this.last_id, new Immutable.Map({
@@ -58,6 +59,8 @@ class LibraryViewState {
                         type: 'track',
                         source: name,
                         name: track.title,
+                        album: album.name,
+                        artist: artist.name,
                         children: new Immutable.Map(),
                       }));  // SO MANY
                     }  // PARENTHESES
