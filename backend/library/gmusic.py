@@ -10,11 +10,11 @@ BUGS:
   * Various artists albums broken
 """
 
-from collections import defaultdict
 import sqlite3
 
 from gmusicapi import Mobileclient, exceptions as GMPExceptions
 from backend.config.config import config
+from backend.library import utils
 
 
 class GpmProvider:
@@ -233,48 +233,9 @@ class GpmProvider:
           WHERE album.albumID IS NULL
         """)
         query_result = cursor.fetchall()
-
-        library = {}
-        for fetched in query_result:
-            track_id = fetched[0]
-            album_id = fetched[4]
-            artist_id = fetched[7]
-
-            if not artist_id:
-                artist_id = 'gpm-artist-none'
-            if artist_id in library:
-                artist = library[artist_id]
-            else:
-                artist = {
-                  'artistID': artist_id,
-                  'name': fetched[8],
-                  'albums': {}
-                }
-            if not album_id:
-                album_id = 'gpm-album-none'
-            if album_id in artist['albums']:
-                album = artist['albums'][album_id]
-            else:
-                album = {
-                  'albumID': album_id,
-                  'name': fetched[5],
-                  'year': fetched[6],
-                  'tracks': {}
-                }
-            if track_id in album['tracks']:
-                track = album['tracks'][track_id]
-            else:
-                track = {
-                  'trackID': track_id,
-                  'title': fetched[1],
-                  'disc': fetched[2],
-                  'no': fetched[3]
-                }
-            album['tracks'][track_id] = track
-            artist['albums'][album_id] = album
-            library[artist_id] = artist
         cursor.close()
-        return library
+
+        return utils.tuples_to_library(query_result)
 
     def get_stream(self, track_id):
         """

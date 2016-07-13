@@ -9,6 +9,10 @@ app = Flask(__name__)
 CORS(app)
 
 mStore = media.MediaStore()
+providers = {
+    'beets': beets.BeetsProvider,
+    'gmusic': gmusic.GpmProvider
+}
 
 
 @app.route("/app/<string:location>")
@@ -19,23 +23,24 @@ def index(location='index.html'):
 
 @app.route("/available_sources")
 def get_available():
-    return jsonify(["gmusic"])
+    return jsonify(list(providers.keys()))
 
 
 @app.route("/library/<string:library_name>")
 def get_library(library_name):
-    if library_name == 'gmusic':
-        gpmProvider = gmusic.GpmProvider()
-        return jsonify(gpmProvider.get_library())
+    if library_name in providers:
+        provider = providers[library_name]()
+        library = provider.get_library()
+        return jsonify(library)
     else:
         return None
 
 
 @app.route("/media/add/<string:library_name>/<string:track_id>")
 def add_media(library_name, track_id):
-    if library_name == 'gmusic':
-        gpmProvider = gmusic.GpmProvider()
-        url = gpmProvider.get_stream(track_id)
+    if library_name in providers:
+        provider = providers[library_name]()
+        url = provider.get_stream(track_id)
         mStore.add_to_store(library_name, track_id, url)
         return "ok"
     else:
@@ -44,7 +49,7 @@ def add_media(library_name, track_id):
 
 @app.route("/media/stream/<string:library_name>/<string:track_id>")
 def get_media(library_name, track_id):
-    if library_name == 'gmusic':
+    if library_name in providers:
         location = mStore.get_from_store(library_name, track_id)
         return send_from_directory(config['media']['tmp'], location)
     else:

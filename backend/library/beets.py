@@ -1,52 +1,54 @@
-# TODO: Use beets in the form of an library
+"""
+Beets provider
+
+TODO:
+  * Get native beets library working (but do we really need it?)
+"""
+
 import sqlite3
+
 from backend.config.config import config
+from backend.library import utils
 
-class BeetsSource:
+
+class BeetsProvider:
+    """
+    Beets Provider
+    """
     def __init__(self):
-        self.connection = sqlite3.connect(config['beets']['db_path'])
-        self.connection.row_factory = BeetsSource.dict_factory
+        self.db_connection = sqlite3.connect(config['beets']['db_path'])
 
-    @staticmethod
-    def dict_factory(cursor, row):
-        d = {}
-        for idx, col in enumerate(cursor.description):
-            d[col[0]] = row[idx]
-        return d
+    def update_db(self):
+        """We will implement this once we got the beets library working"""
+        raise NotImplemented
 
     def get_library(self):
-        cursor = self.connection.cursor()
-        cursor.execute("""SELECT I.title, I.albumartist, A.album FROM items I JOIN albums A ON I.album_id = A.id""")
-        all_tracks = cursor.fetchall()
+        """
+        Returns the whole library in a form of a tree with this structure:
+        (album)artist -> album -> track.
+        """
+        cursor = self.db_connection.cursor()
+        cursor.execute("""
+          SELECT items.id, items.title, items.disc, items.track, albums.id, albums.album, albums.year, items.mb_albumartistid, albums.albumartist
+          FROM items LEFT JOIN albums ON items.album_id = albums.id
+        """)
+        query_result = cursor.fetchall()
+        cursor.close()
 
+        return utils.tuples_to_library(query_result)
 
-        _library = {}
-        for track in all_tracks:
-            artist = track['albumartist']
-            album = track['album']
-            title = track['title']
-
-            if artist not in _library:
-                _library[artist] = {"albums": {}}
-            if album not in _library[artist]["albums"]:
-                _library[artist]["albums"][album] = {"tracks": []}
-            if title not in _library[artist]["albums"][album]["tracks"]:
-                _library[artist]["albums"][album]["tracks"].append({"title": title})
-
-        library = []
-        for artist in _library.keys():
-            albums = []
-            for album in _library[artist]['albums'].keys():
-                tracks = _library[artist]['albums'][album]['tracks']
-                albums.append({'name': album, 'tracks': tracks})
-            _artist = {'name': artist, 'albums': albums}
-            library.append(_artist)
-        return library
-
-    def get_albumart(self):
-        pass
-
-
-if __name__ == '__main__':
-    beets = BeetsSource()
-    print(beets.get_library())
+    def get_stream(self, track_id):
+        """
+        Returns URL of the requested track with id=track_id.
+        """
+        cursor = self.db_connection.cursor()
+        cursor.execute("""
+          SELECT
+          items.path
+          FROM
+          items
+          WHERE
+          id = ?
+        """, [track_id])
+        stream = cursor.fetchone()[0].decode(encoding='UTF-8')
+        return 'file://' + stream
