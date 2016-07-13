@@ -280,4 +280,4 @@ class GpmProvider:
         """
         Returns URL of the requested track with id=track_id.
         """
-        return self.gpm(track_id)
+        return self.gpm.get_stream_url(track_id)

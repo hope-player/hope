@@ -1,13 +1,25 @@
 import lVState from '../state/LibraryViewState';
 
-export default class Api {
+class Api {
+  constructor() {
+    this.root = 'http://127.0.0.1:5000';
+  }
   initLibrary() {
-    fetch('http://127.0.0.1:5000/available_sources')
+    fetch(`${this.root}/available_sources`)
       .then(response => response.json())
       .then(sources => {
-        sources.forEach(source => fetch(`http://127.0.0.1:5000/library/${source}`)
+        sources.forEach(source => fetch(`${this.root}/library/${source}`)
           .then(response => response.json())
           .then(library => lVState.addSource(source, library)));
       });
   }
+
+  addTrack(source, trackId, callback) {
+    fetch(`${this.root}/media/add/${source}/${trackId}`)
+      .then(response => callback(response));
+  }
 }
+
+const singleton = new Api();
+singleton.initLibrary();
+export default singleton;

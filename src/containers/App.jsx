@@ -11,17 +11,12 @@ import PlayerView from '../components/PlayerView';
 import lVState from '../state/LibraryViewState';
 import pState from '../state/PlayerState';
 
-import Api from '../api/api';
+import '../api/api';
 
 import '../styles/main.css';
 import '../styles/icons.css';
 
 @observer export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.api = new Api();
-    this.api.initLibrary();
-  }
   render() {
     return (
       <Grid className="fill-screen">
@@ -52,6 +47,8 @@ import '../styles/icons.css';
           <PlayerView
             playerState={pState.state}
             currentTrack={pState.currentTrack}
+            ready={pState.ready}
+            stream={pState.stream}
           />
         </Row>
       </Grid>
