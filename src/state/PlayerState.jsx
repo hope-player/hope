@@ -9,13 +9,16 @@ class PlayListViewState {
   constructor() {
     this.play = this.play.bind(this);
     this.playlist = new Immutable.List();
-    this.string = 'stopped';
+    this.state = 'stopped';
     this.nowPlaying = -1;
     this.addToPlayList = this.addToPlayList.bind(this);
   }
 
   @computed get currentTrack() {
-    return this.playlist.get(this.index);
+    if (this.nowPlaying === -1) {
+      return null;
+    }
+    return this.playlist.get(this.nowPlaying);
   }
 
   @action addToPlayList(track) {
@@ -24,6 +27,7 @@ class PlayListViewState {
 
   @action play(index : number) {
     this.nowPlaying = index;
+    this.state = 'playing';
   }
 }
 
