@@ -47,8 +47,8 @@ import '../styles/icons.css';
           <PlayerView
             playerState={pState.state}
             currentTrack={pState.currentTrack}
-            ready={pState.ready}
             stream={pState.stream}
+            controls={pState.controls}
           />
         </Row>
       </Grid>

@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import Immutable from 'immutable';
 
-import api from '../api/api'
+import api from '../api/api';
 
 class PlayListViewState {
   @observable playlist : Immutable.List;
@@ -13,9 +13,12 @@ class PlayListViewState {
     this.play = this.play.bind(this);
     this.playlist = new Immutable.List();
     this.state = 'stopped';
-    this.ready = false;
     this.nowPlaying = -1;
     this.addToPlayList = this.addToPlayList.bind(this);
+    this.controls = {
+      pause: api.pause,
+      resume: api.resume,
+    };
   }
 
   @computed get currentTrack() {
@@ -41,7 +44,7 @@ class PlayListViewState {
     this.nowPlaying = index;
     this.state = 'playing';
     const track = this.playlist.get(index);
-    api.addTrack(track.get('source'), track.get('global_id'), () => this.setReady(true));
+    api.play(track.get('source'), track.get('global_id'));
   }
 
   @action setReady(ready) {

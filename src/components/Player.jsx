@@ -3,15 +3,13 @@ import { observer } from 'mobx-react';
 
 @observer export default class Player extends React.Component {
   renderPlayer() {
-    const { currentTrack, ready, stream } = this.props;
-    if (currentTrack && ready) {
+    const { controls, currentTrack } = this.props;
+    if (currentTrack) {
       return (
-        <audio controls>
-          <source
-            src={stream}
-            type="audio/mpeg"
-          />
-        </audio>
+        <div>
+          <a onClick={controls.pause}>pause</a>
+          <a onClick={controls.resume}>resume</a>
+        </div>
       );
     }
     return null;
