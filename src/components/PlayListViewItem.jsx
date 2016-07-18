@@ -12,12 +12,18 @@ import { observer } from 'mobx-react';
   }
 
   render() : React.Element {
-    const { track } = this.props;
+    const { track, active } = this.props;
+
+    let className = 'playlist-item';
+    if (active) {
+      className = 'playlist-item active';
+    }
+
     return (
       <div
-        className="playlist-item"
         key={`pl-item_${track.get('id')}`}
         onDoubleClick={this.play}
+        className={className}
       >
         {track.get('artist')} - {track.get('album')} - {track.get('name')}
       </div>

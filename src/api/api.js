@@ -4,14 +4,33 @@ import lVState from '../state/LibraryViewState';
 class Api {
   constructor() {
     this.root = 'http://127.0.0.1:8080';
+
+    this.listeners = new Map();
+
     this.wsConnection = new WebSocket('ws://127.0.0.1:8080/ws');
-    this.wsConnection.onmessage = this.handleMessage;
+    this.wsConnection.onmessage = this.handleMessage.bind(this);  // *this* should point to an Api class instance
+
     this.pause = this.pause.bind(this);
     this.resume = this.resume.bind(this);
   }
 
   handleMessage(message) {
-    console.log(message);
+    const parsed = JSON.parse(message.data);
+    if (this.listeners.has(parsed.event)) {
+      console.log('ok');
+      this.listeners.get(parsed.event).forEach(listener => {
+        listener(parsed.data);
+      });
+    }
+  }
+
+  addListener(event, listener) {
+    let oldListeners = [];
+    if (this.listeners.has(event)) {
+      oldListeners = this.listeners.get(event);
+    }
+    oldListeners.push(listener);
+    this.listeners.set(event, oldListeners);
   }
 
   initLibrary() {

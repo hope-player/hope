@@ -35,7 +35,7 @@ import '../styles/icons.css';
           <Col md={6}>
             <PlayListView
               playlist={pState.playlist}
-              updateNowPlaying={pState.updateNowPlaying}
+              nowPlaying={pState.nowPlaying}
               play={pState.play}
             />
           </Col>

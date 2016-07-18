@@ -45,6 +45,7 @@ async def websocket_handler(request):
             rpc = json.loads(msg.data)
             method = rpc['method']
             if method == 'play':
+                pl.pause()
                 library_name = rpc['params'][0]
                 track_id = rpc['params'][1]
                 if library_name in providers:

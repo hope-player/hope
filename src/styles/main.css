@@ -94,3 +94,7 @@ body {
 .library-view-item-header:hover .playlist-add {
   display: inline;
 }
+
+.active {
+  font-weight: bold;
+}
