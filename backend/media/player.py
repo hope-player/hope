@@ -1,12 +1,24 @@
+"""
+This module implements a simple gstreamer-based music player.
+
+TODO:
+ * Replaygain sink support
+
+"""
+
 import json
 import threading
 
 import gi
-gi.require_version('Gst', '1.0')
 from gi.repository import Gst, GObject
+gi.require_version('Gst', '1.0')
+
 
 
 class Player:
+    """
+    This class implements a simple gstreamer-based music player.
+    """
     def __init__(self):
         Gst.init(None)
 
@@ -16,39 +28,57 @@ class Player:
 
         bus = self.player.get_bus()
         bus.add_signal_watch()
-        bus.connect("message", self.handle_event)
+        bus.connect("message", self._handle_event)
         self._last_event = None
 
-        self._event_thread = threading.Thread(target=self._run)
+
+        def _run():
+            loop = GObject.MainLoop()
+            loop.run()
+        self._event_thread = threading.Thread(target=_run)
         self._event_thread.start()
 
         self._event_listeners = {1: print}
-        self._event_listener_lastId = 1
+        self._event_listener_last_id = 1
 
-    def _run(self):
-        loop = GObject.MainLoop()
-        loop.run()
 
     def register_listener(self, listener):
-        self._event_listener_lastId += 1
-        self._event_listeners[self._event_listener_lastId] = listener
-        return self._event_listener_lastId
+        """
+        Register the listener function to be called every time
+        the player produces any event.
+        Return listener_id, which specifies the function.
+        """
+        self._event_listener_last_id += 1
+        self._event_listeners[self._event_listener_last_id] = listener
+        return self._event_listener_last_id
 
     def unregister_listener(self, listener_id):
+        """
+        Deletes the listener by listener_id.
+        """
         del self._event_listeners[listener_id]
 
     def play(self, location):
+        """
+        Plays the track at specified location.
+        """
         self.player.set_state(Gst.State.NULL)
         self.player.set_property("uri", location)
         self.player.set_state(Gst.State.PLAYING)
 
     def pause(self):
+        """
+        Sets the player state to PAUSED.
+        """
         self.player.set_state(Gst.State.PAUSED)
 
     def resume(self):
+        """
+        Sets the player state to PLAYING.
+        """
         self.player.set_state(Gst.State.PLAYING)
 
-    def handle_event(self, bus, message):
+    def _handle_event(self, _, message):
         event = None
         message_type = message.type
         if message_type == Gst.MessageType.STATE_CHANGED:
@@ -62,8 +92,3 @@ class Player:
             self._last_event = event
         for listener in self._event_listeners:
             self._event_listeners[listener](event)
-
-
-if __name__ == '__main__':
-    pl = Player()
-    pl.play('..')

@@ -13,7 +13,7 @@ BUGS:
 import sqlite3
 
 from gmusicapi import Mobileclient, exceptions as GMPExceptions
-from backend.config.config import config
+from backend.config.config import CONFIG
 from backend.library import utils
 
 
@@ -32,10 +32,10 @@ class GpmProvider:
         """
         self.gpm = Mobileclient()
         self.gpm.login(
-            config['gmusic']['login'],
-            config['gmusic']['password'],
-            config['gmusic']['key'])
-        self.db_connection = sqlite3.connect(config['gmusic']['db_path'])
+            CONFIG['gmusic']['login'],
+            CONFIG['gmusic']['password'],
+            CONFIG['gmusic']['key'])
+        self.db_connection = sqlite3.connect(CONFIG['gmusic']['db_path'])
         self._create_db()
 
     def _create_db(self):
@@ -127,7 +127,10 @@ class GpmProvider:
 
     def _get_artist_id(self, artist_id):
         try:
-            return self.gpm.get_artist_info(artist_id, include_albums=False, max_rel_artist=0, max_top_tracks=0)
+            return self.gpm.get_artist_info(
+                artist_id,
+                include_albums=False, max_rel_artist=0, max_top_tracks=0
+            )
         except GMPExceptions.CallFailure:
             # gpm didn't return a valid response
             return None

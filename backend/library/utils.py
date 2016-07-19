@@ -1,4 +1,12 @@
+"""
+This modules providers misc utilities.
+"""
+
 def tuples_to_library(tuples):
+    """
+    This function takes tuples (track_id, title, disc, no, album_id,
+    album_name, album_year, artist_id, artist_name)
+    """
     library = {}
 
     for item in tuples:
@@ -12,9 +20,9 @@ def tuples_to_library(tuples):
             artist = library[artist_id]
         else:
             artist = {
-              'artistID': artist_id,
-              'name': item[8],
-              'albums': {}
+                'artistID': artist_id,
+                'name': item[8],
+                'albums': {}
             }
         if not album_id:
             album_id = 'gpm-album-none'
@@ -22,19 +30,19 @@ def tuples_to_library(tuples):
             album = artist['albums'][album_id]
         else:
             album = {
-              'albumID': album_id,
-              'name': item[5],
-              'year': item[6],
-              'tracks': {}
+                'albumID': album_id,
+                'name': item[5],
+                'year': item[6],
+                'tracks': {}
             }
         if track_id in album['tracks']:
             track = album['tracks'][track_id]
         else:
             track = {
-              'trackID': track_id,
-              'title': item[1],
-              'disc': item[2],
-              'no': item[3]
+                'trackID': track_id,
+                'title': item[1],
+                'disc': item[2],
+                'no': item[3]
             }
         album['tracks'][track_id] = track
         artist['albums'][album_id] = album

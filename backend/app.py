@@ -1,29 +1,38 @@
+"""
+This module does run a server for the hope player.
+"""
+
 import json
 
 from aiohttp import web, MsgType
 
-from backend.media import player
+from backend.media.player import Player
 from backend.library import gmusic, beets
-from backend.media import media
-from backend.config.config import config
 
-pl = player.Player()
-providers = {
+PLAYER = Player()
+PROVIDERS = {
     'beets': beets.BeetsProvider,
     'gmusic': gmusic.GpmProvider
 }
-app = web.Application()
+APP = web.Application()
 
 
-async def available_sources_handler(request):
+async def available_sources_handler():
+    """
+    This function returns available providers.
+    """
     return web.Response(
-        body=json.dumps(list(providers.keys())).encode('utf-8'),
+        body=json.dumps(list(PROVIDERS.keys())).encode('utf-8'),
         content_type='application/json')
 
 async def library_handler(request):
+    """
+    This function returns the library for library_name specified
+    in the request.
+    """
     library_name = request.match_info.get('library_name', "")
-    if library_name in providers:
-        provider = providers[library_name]()
+    if library_name in PROVIDERS:
+        provider = PROVIDERS[library_name]()
         library = provider.get_library()
         return web.Response(
             body=json.dumps(library).encode('utf-8'),
@@ -32,45 +41,49 @@ async def library_handler(request):
         return None
 
 async def websocket_handler(request):
-    ws = web.WebSocketResponse()
-    await ws.prepare(request)
+    """
+    This function handles the websocket connection.
+    It allows to control the PLAYER and is sending any events from the PLAYER.
+    """
+    socket = web.WebSocketResponse()
+    await socket.prepare(request)
 
-    def listener(message):
-        ws.send_str(str(message))
-    listener_id = pl.register_listener(listener)
+    def _listener(message):
+        socket.send_str(str(message))
+    listener_id = PLAYER.register_listener(_listener)
 
-    async for msg in ws:
+    async for msg in socket:
         if msg.tp == MsgType.text:
             print(msg.data)
             rpc = json.loads(msg.data)
             method = rpc['method']
             if method == 'play':
-                pl.pause()
+                PLAYER.pause()
                 library_name = rpc['params'][0]
                 track_id = rpc['params'][1]
-                if library_name in providers:
-                    provider = providers[library_name]()
+                if library_name in PROVIDERS:
+                    provider = PROVIDERS[library_name]()
                     url = provider.get_stream(track_id)
-                    pl.play(url)
+                    PLAYER.play(url)
             elif method == 'pause':
-                pl.pause()
+                PLAYER.pause()
             elif method == 'resume':
-                pl.resume()
+                PLAYER.resume()
         elif msg.tp == MsgType.error:
             print('ws connection closed with exception %s' %
-                  ws.exception())
+                  socket.exception())
 
-    pl.unregister_listener(listener_id)
+    PLAYER.unregister_listener(listener_id)
     print('websocket connection closed')
 
-    return ws
+    return socket
 
 
-app.router.add_route('GET', '/ws', websocket_handler)
-app.router.add_route('GET', '/available_sources', available_sources_handler)
-app.router.add_route('GET', '/library/{library_name}', library_handler)
-app.router.add_static('/', '/home/neo/sources/hope/dist')
+APP.router.add_route('GET', '/ws', websocket_handler)
+APP.router.add_route('GET', '/available_sources', available_sources_handler)
+APP.router.add_route('GET', '/library/{library_name}', library_handler)
+APP.router.add_static('/', '/home/neo/sources/hope/dist')
 
 
 
-web.run_app(app)
+web.run_app(APP)

@@ -2,12 +2,12 @@
 Beets provider
 
 TODO:
-  * Get native beets library working (but do we really need it?)
+  * Consider using beets via Python API
 """
 
 import sqlite3
 
-from backend.config.config import config
+from backend.config.config import CONFIG
 from backend.library import utils
 
 
@@ -16,11 +16,11 @@ class BeetsProvider:
     Beets Provider
     """
     def __init__(self):
-        self.db_connection = sqlite3.connect(config['beets']['db_path'])
+        self.db_connection = sqlite3.connect(CONFIG['beets']['db_path'])
 
     def update_db(self):
         """We will implement this once we got the beets library working"""
-        raise NotImplemented
+        raise NotImplementedError
 
     def get_library(self):
         """
