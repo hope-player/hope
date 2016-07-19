@@ -31,6 +31,7 @@ class BeetsProvider:
         cursor.execute("""
           SELECT items.id, items.title, items.disc, items.track, albums.id, albums.album, albums.year, items.mb_albumartistid, albums.albumartist
           FROM items LEFT JOIN albums ON items.album_id = albums.id
+          ORDER BY albums.albumartist
         """)
         query_result = cursor.fetchall()
         cursor.close()

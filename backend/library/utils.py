@@ -2,30 +2,42 @@
 This modules providers misc utilities.
 """
 
+from collections import OrderedDict
+
+
 def tuples_to_library(tuples, source='unknown'):
     """
     This function takes tuples (track_id, title, disc, no, album_id,
     album_name, album_year, artist_id, artist_name)
     """
-    library = {}
+    library = OrderedDict()
 
     for item in tuples:
         track_id = str(item[0])
+        track_name = item[1]
+        track_disc = item[2]
+        track_no = item[3]
+
         album_id = str(item[4])
+        album_name = item[5]
+        album_year = item[6]
+
         artist_id = str(item[7])
+        artist_name = item[8]
 
         if not artist_id:
-            artist_id = 'gpm-artist-none'
+            artist_id = 'unknown_artist'
+            artist_name = '???'
         if artist_id in library:
             artist = library[artist_id]
         else:
             artist = {
                 'id': artist_id,
-                'name': item[8],
+                'name': artist_name,
                 'type': 'artist',
                 'source': source,
                 'metadata': {
-                    'name': item[8]
+                    'name': artist_name
                 },
                 'children': {}
             }
@@ -36,13 +48,13 @@ def tuples_to_library(tuples, source='unknown'):
         else:
             album = {
                 'id': album_id,
-                'name': item[5],
+                'name': album_name,
                 'type': 'album',
                 'source': source,
                 'metadata': {
-                    'name': item[5],
-                    'year': item[6],
-                    'artist': item[8]
+                    'name': album_name,
+                    'year': album_year,
+                    'artist': artist_name
                 },
                 'children': {}
             }
@@ -51,15 +63,15 @@ def tuples_to_library(tuples, source='unknown'):
         else:
             track = {
                 'id': track_id,
-                'name': item[1],
+                'name': track_name,
                 'type': 'track',
                 'source': source,
                 'metadata': {
-                    'title': item[1],
-                    'disc': item[2],
-                    'no': item[3],
-                    'artist': item[8],
-                    'album': item[5]
+                    'title': track_name,
+                    'disc': track_disc,
+                    'no': track_no,
+                    'artist': artist_name,
+                    'album': album_name
                 },
                 'children': {}
             }

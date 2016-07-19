@@ -68,6 +68,9 @@ import { observer } from 'mobx-react';
             }
           </div>
           {
+            node.get('type') === 'track' ? `${node.getIn(['metadata', 'no'])}. ` : null
+          }
+          {
             node.get('name')
           }
           <a className="icon-add playlist-add" onClick={this.addToPlayList} />
