@@ -35,7 +35,7 @@ class BeetsProvider:
         query_result = cursor.fetchall()
         cursor.close()
 
-        return utils.tuples_to_library(query_result)
+        return utils.tuples_to_library(query_result, 'beets')
 
     def get_stream(self, track_id):
         """

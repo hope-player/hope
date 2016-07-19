@@ -26,7 +26,7 @@ import '../styles/icons.css';
         <Row className="main">
           <Col md={3}>
             <LibraryView
-              root={lVState.root}
+              sources={lVState.sources}
               toggle={lVState.toggle}
               isExpanded={lVState.isExpanded}
               addToPlayList={pState.addToPlayList}

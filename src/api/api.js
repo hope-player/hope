@@ -17,7 +17,6 @@ class Api {
   handleMessage(message) {
     const parsed = JSON.parse(message.data);
     if (this.listeners.has(parsed.event)) {
-      console.log('ok');
       this.listeners.get(parsed.event).forEach(listener => {
         listener(parsed.data);
       });

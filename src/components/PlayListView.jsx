@@ -12,6 +12,7 @@ export default ({ playlist, play, nowPlaying }) => {
             play={play}
             active={nowPlaying === index}
             index={index}
+            key={`pli_${index}`}
           />
         )
       }

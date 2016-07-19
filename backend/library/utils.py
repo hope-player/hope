@@ -2,7 +2,7 @@
 This modules providers misc utilities.
 """
 
-def tuples_to_library(tuples):
+def tuples_to_library(tuples, source='unknown'):
     """
     This function takes tuples (track_id, title, disc, no, album_id,
     album_name, album_year, artist_id, artist_name)
@@ -20,32 +20,51 @@ def tuples_to_library(tuples):
             artist = library[artist_id]
         else:
             artist = {
-                'artistID': artist_id,
+                'id': artist_id,
                 'name': item[8],
-                'albums': {}
+                'type': 'artist',
+                'source': source,
+                'metadata': {
+                    'name': item[8]
+                },
+                'children': {}
             }
         if not album_id:
             album_id = 'gpm-album-none'
-        if album_id in artist['albums']:
-            album = artist['albums'][album_id]
+        if album_id in artist['children']:
+            album = artist['children'][album_id]
         else:
             album = {
-                'albumID': album_id,
+                'id': album_id,
                 'name': item[5],
-                'year': item[6],
-                'tracks': {}
+                'type': 'album',
+                'source': source,
+                'metadata': {
+                    'name': item[5],
+                    'year': item[6],
+                    'artist': item[8]
+                },
+                'children': {}
             }
-        if track_id in album['tracks']:
-            track = album['tracks'][track_id]
+        if track_id in album['children']:
+            track = album['children'][track_id]
         else:
             track = {
-                'trackID': track_id,
-                'title': item[1],
-                'disc': item[2],
-                'no': item[3]
+                'id': track_id,
+                'name': item[1],
+                'type': 'track',
+                'source': source,
+                'metadata': {
+                    'title': item[1],
+                    'disc': item[2],
+                    'no': item[3],
+                    'artist': item[8],
+                    'album': item[5]
+                },
+                'children': {}
             }
-        album['tracks'][track_id] = track
-        artist['albums'][album_id] = album
+        album['children'][track_id] = track
+        artist['children'][album_id] = album
         library[artist_id] = artist
 
     return library

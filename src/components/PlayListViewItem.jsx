@@ -25,7 +25,9 @@ import { observer } from 'mobx-react';
         onDoubleClick={this.play}
         className={className}
       >
-        {track.get('artist')} - {track.get('album')} - {track.get('name')}
+        {track.getIn(['metadata', 'artist'])} -
+        {track.getIn(['metadata', 'album'])} -
+        {track.getIn(['metadata', 'title'])}
       </div>
     );
   }

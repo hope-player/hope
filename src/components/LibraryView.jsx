@@ -2,12 +2,17 @@ import React from 'react';
 
 import { LibraryViewItem } from './LibraryViewItem';
 
-export default ({ root, toggle, isExpanded, addToPlayList }) =>
+export default ({ sources, toggle, isExpanded, addToPlayList }) =>
   <div className={"library-view"}>
-    <LibraryViewItem
-      node={root}
-      toggle={toggle}
-      isExpanded={isExpanded}
-      addToPlayList={addToPlayList}
-    />
+    {
+      sources.valueSeq().map(source =>
+        <LibraryViewItem
+          node={source}
+          toggle={toggle}
+          isExpanded={isExpanded}
+          addToPlayList={addToPlayList}
+          key={`lvi_${source.get('id')}`}
+        />
+      )
+    }
   </div>;

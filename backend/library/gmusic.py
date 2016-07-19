@@ -238,7 +238,7 @@ class GpmProvider:
         query_result = cursor.fetchall()
         cursor.close()
 
-        return utils.tuples_to_library(query_result)
+        return utils.tuples_to_library(query_result, 'gmusic')
 
     def get_stream(self, track_id):
         """

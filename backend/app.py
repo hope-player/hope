@@ -17,7 +17,7 @@ PROVIDERS = {
 APP = web.Application()
 
 
-async def available_sources_handler():
+async def available_sources_handler(_):
     """
     This function returns available providers.
     """

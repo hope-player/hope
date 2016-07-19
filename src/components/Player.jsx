@@ -5,7 +5,6 @@ import { observer } from 'mobx-react';
   renderPlayer() {
     const { controls, currentTrack } = this.props;
     if (currentTrack) {
-      console.log(currentTrack);
       return (
         <div>
           <a onClick={controls.pause}>pause</a>

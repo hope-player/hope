@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import { observer } from 'mobx-react';
 
@@ -31,9 +30,10 @@ import { observer } from 'mobx-react';
     const { node, isExpanded, toggle, addToPlayList } = this.props;
     const result = [];
     if (isExpanded(node.get('id'))) {
-      node.get('children').map(child => {
+      node.get('children').forEach(child => {
         result.push(
           <LibraryViewItem
+            key={`lvi_${child.get('id')}`}
             node={child}
             toggle={toggle}
             isExpanded={isExpanded}

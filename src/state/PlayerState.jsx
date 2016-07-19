@@ -23,7 +23,6 @@ class PlayListViewState {
     };
     api.addListener('state_changed', data => {
       const newState = data[1];
-      console.log(newState);
       if (newState === 2) {
         this.state = 'stopped';
       } else if (newState === 3) {
@@ -51,7 +50,7 @@ class PlayListViewState {
   @action play(index : number) {
     this.nowPlaying = index;
     const track = this.playlist.get(index);
-    api.play(track.get('source'), track.get('global_id'));
+    api.play(track.get('source'), track.get('id'));
   }
 
   @action setReady(ready) {
