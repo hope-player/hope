@@ -27,6 +27,9 @@ export default function (state = defaultState, action) {
         );
       });
     case 'TOGGLE':
+      if (state.get('expanded').has(action.id)) {
+        return state.update('expanded', expanded => expanded.delete(action.id));
+      }
       return state.update('expanded', expanded => expanded.add(action.id));
     case 'ADD_TO_PLAYLIST':
       return state;
