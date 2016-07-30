@@ -1,6 +1,9 @@
-export function play(index) {
+export function play(source, id, index) {
   return {
-    type: 'PLAY',
+    type: 'PLAY_REQUESTED',
+    source,
+    id,
+    index,
   };
 }
 

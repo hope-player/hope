@@ -28,10 +28,20 @@ function* initLibrary() {
   }
 }
 
+function* play(action) {
+  try {
+    yield call(Api.play, action.source, action.id);
+    yield put({ type: 'PLAY_SUCCEEDED', index: action.index });
+  } catch (e) {
+    yield put({ type: 'PLAY_FAILED', message: e.message });
+  }
+}
+
 function* mainSaga() {
   yield [
     takeEvery('LIBRARY_INIT_REQUESTED', initLibrary),
     takeEvery('SOURCE_FETCH_REQUESTED', addSource),
+    takeEvery('PLAY_REQUESTED', play),
   ];
 }
 

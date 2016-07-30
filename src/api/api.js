@@ -11,6 +11,7 @@ class Api {
 
     this.getAvailableSources = this.getAvailableSources.bind(this);
     this.getSource = this.getSource.bind(this);
+    this.play = this.play.bind(this);
     this.pause = this.pause.bind(this);
     this.resume = this.resume.bind(this);
   }
@@ -42,10 +43,17 @@ class Api {
   }
 
   play(source, trackId) {
-    this.wsConnection.send(JSON.stringify({
-      method: 'play',
-      params: [source, trackId],
-    }));
+    return new Promise((resolve, reject) => {
+      try {
+        this.wsConnection.send(JSON.stringify({
+          method: 'play',
+          params: [source, trackId],
+        }));
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 
   pause() {

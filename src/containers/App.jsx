@@ -37,7 +37,7 @@ class App extends React.Component {
           <Col md={6}>
             <PlayListView
               playlist={playlist.get('playlist')}
-              nowPlaying={player.nowPlaying}
+              active={playlist.get('active')}
               play={play}
             />
           </Col>
@@ -69,7 +69,7 @@ function mapDispatchToProps(dispatch) {
   return {
     toggle: (id) => dispatch(toggle(id)),
     addToPlayList: (track) => dispatch(addToPlayList(track)),
-    play: (index) => dispatch(play(index)),
+    play: (source, id, index) => dispatch(play(source, id, index)),
   };
 }
 
