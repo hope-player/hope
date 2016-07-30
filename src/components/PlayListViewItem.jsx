@@ -1,14 +1,13 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 
-@observer export default class PlayListViewsItem extends React.Component {
+export default class PlayListViewsItem extends React.Component {
   constructor(props) {
     super(props);
     this.play = this.play.bind(this);
   }
 
   play() {
-    this.props.play(this.props.index);
+    this.props.play(this.props.track, this.props.index);
   }
 
   render() : React.Element {

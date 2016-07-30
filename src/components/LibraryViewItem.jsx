@@ -1,7 +1,6 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 
-@observer export class LibraryViewItem extends React.Component {
+export class LibraryViewItem extends React.Component {
   constructor(props) {
     super(props);
     this.toggle = this.toggle.bind(this);

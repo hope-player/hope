@@ -2,7 +2,7 @@ import React from 'react';
 
 import PlayListViewItem from './PlayListViewItem';
 
-export default ({ playlist, play, nowPlaying }) => {
+export default ({ playlist, play, active }) => {
   return (
     <div className={"playlist-view"}>
       {
@@ -10,7 +10,7 @@ export default ({ playlist, play, nowPlaying }) => {
           <PlayListViewItem
             track={item}
             play={play}
-            active={nowPlaying === index}
+            active={active === index}
             index={index}
             key={`pli_${index}`}
           />
