@@ -1,12 +1,48 @@
-import { Map, Set } from 'immutable';
+import Immutable from 'immutable';
 
-import { libraryFromJS, librarySorter } from '../utils/LibraryUtils';
-
-const defaultState = new Map({
+const defaultState = new Immutable.Map({
   lastId: 0,
-  expanded: new Set(),
-  sources: new Map(),
+  expanded: new Immutable.Set(),
+  sources: new Immutable.Map(),
 });
+
+function libraryFromJS(js) {
+  if (typeof js !== 'object' || js === null) {
+    return js;
+  } else if (Array.isArray(js)) {
+    return Immutable.Seq(js).map(libraryFromJS).toList();
+  } else if ('type' in js && js.type === 'album') {
+    const result = Immutable
+      .Seq(js)
+      .map(libraryFromJS)
+      .toMap()
+      .update(
+        'children',
+        children =>
+          children.sort(
+            (a, b) => {
+              const aNo = a.getIn(['metadata', 'no']);
+              const bNo = b.getIn(['metadata', 'no']);
+              if (aNo > bNo) {
+                return 1;
+              } else if (aNo < bNo) {
+                return -1;
+              }
+              return 0;
+            }));
+    return result;
+  }
+  return Immutable.Seq(js).map(libraryFromJS).toMap();
+}
+
+function librarySorter(a, b) {
+  const aName = a.get('name');
+  const bName = b.get('name');
+  if (aName && bName) {
+    return aName.localeCompare(bName);
+  }
+  return 0;
+}
 
 export default function (state = defaultState, action) {
   switch (action.type) {
@@ -16,7 +52,7 @@ export default function (state = defaultState, action) {
         mutableState.set('lastId', lastId);
         mutableState.setIn(
           ['sources', action.source],
-          new Map({
+          new Immutable.Map({
             name: action.source,
             id: `source_${lastId}`,
             metadata: {},

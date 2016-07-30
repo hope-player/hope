@@ -1,6 +1,18 @@
 import axios from 'axios';
 
-import { wrapInPromise } from '../utils/misc';
+function sendWSPromise(method, params) {
+  return new Promise((resolve, reject) => {
+    try {
+      this.wsConnection.send(JSON.stringify({
+        method,
+        params,
+      }));
+      resolve();
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
 
 class Api {
   constructor() {
@@ -45,30 +57,18 @@ class Api {
   }
 
   play(source, trackId) {
-    return wrapInPromise(() => {
-      this.wsConnection.send(JSON.stringify({
-        method: 'play',
-        params: [source, trackId],
-      }));
-    });
+    sendWSPromise('play', [source, trackId]);
   }
 
   pause() {
-    return wrapInPromise(() => {
-      this.wsConnection.send(JSON.stringify({
-        method: 'pause',
-      }));
-    });
+    sendWSPromise('pause', []);
   }
 
   resume() {
-    return wrapInPromise(() => {
-      this.wsConnection.send(JSON.stringify({
-        method: 'resume',
-      }));
-    });
+    sendWSPromise('resume', []);
   }
 }
 
 const singleton = new Api();
+singleton.initLibrary();
 export default singleton;
