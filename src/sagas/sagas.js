@@ -12,7 +12,6 @@ function* addSource(action) {
       source: action.source,
     });
   } catch (e) {
-    console.log(e);
     yield put({ type: 'SOURCE_FETCH_FAILED', message: e.message });
   }
 }

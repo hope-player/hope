@@ -31,8 +31,6 @@ export default function (state = defaultState, action) {
         return state.update('expanded', expanded => expanded.delete(action.id));
       }
       return state.update('expanded', expanded => expanded.add(action.id));
-    case 'ADD_TO_PLAYLIST':
-      return state;
     default:
       return state;
   }

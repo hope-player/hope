@@ -7,8 +7,8 @@ import PlayListView from '../components/PlayListView';
 import InfoView from '../components/InfoView';
 import PlayerView from '../components/PlayerView';
 
-import { toggle, addToPlayList } from '../actions/LibraryActions';
-import { play } from '../actions/PlayListActions';
+import { toggle } from '../actions/LibraryActions';
+import { addToPlayList, play } from '../actions/PlayListActions';
 
 import '../api/api';
 
@@ -36,7 +36,7 @@ class App extends React.Component {
           </Col>
           <Col md={6}>
             <PlayListView
-              playlist={playlist}
+              playlist={playlist.get('playlist')}
               nowPlaying={player.nowPlaying}
               play={play}
             />
