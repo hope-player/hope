@@ -22,7 +22,7 @@ export default function (state = defaultState, action) {
             metadata: {},
             children:
               libraryFromJS(action.library)
-              .sort(librarySorter),
+                .sort(librarySorter),
           })
         );
       });

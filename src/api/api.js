@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { wrapInPromise } from '../utils/misc';
+
 class Api {
   constructor() {
     this.root = 'http://127.0.0.1:8080';
@@ -43,42 +45,27 @@ class Api {
   }
 
   play(source, trackId) {
-    return new Promise((resolve, reject) => {
-      try {
-        this.wsConnection.send(JSON.stringify({
-          method: 'play',
-          params: [source, trackId],
-        }));
-        resolve();
-      } catch (e) {
-        reject(e);
-      }
+    return wrapInPromise(() => {
+      this.wsConnection.send(JSON.stringify({
+        method: 'play',
+        params: [source, trackId],
+      }));
     });
   }
 
   pause() {
-    return new Promise((resolve, reject) => {
-      try {
-        this.wsConnection.send(JSON.stringify({
-          method: 'pause',
-        }));
-        resolve();
-      } catch (e) {
-        reject(e);
-      }
+    return wrapInPromise(() => {
+      this.wsConnection.send(JSON.stringify({
+        method: 'pause',
+      }));
     });
   }
 
   resume() {
-    return new Promise((resolve, reject) => {
-      try {
-        this.wsConnection.send(JSON.stringify({
-          method: 'resume',
-        }));
-        resolve();
-      } catch (e) {
-        reject(e);
-      }
+    return wrapInPromise(() => {
+      this.wsConnection.send(JSON.stringify({
+        method: 'resume',
+      }));
     });
   }
 }

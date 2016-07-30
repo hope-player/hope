@@ -17,49 +17,47 @@ import 'normalize.css';
 import '../styles/main.css';
 import '../styles/icons.css';
 
-class App extends React.Component {
-  render() {
-    const { library, playlist, player,
-      toggle, addToPlayList, play, playNext, playPrevious,
-      pause, resume } = this.props;
-    return (
-      <Grid className="fill-screen">
-        <Row className="app-bar">
-          <h2>hope</h2> <i> (dev version)</i>
-        </Row>
-        <Row className="main">
-          <Col md={3}>
-            <LibraryView
-              sources={library.get('sources')}
-              toggle={toggle}
-              isExpanded={(id) => library.get('expanded').has(id)}
-              addToPlayList={addToPlayList}
-            />
-          </Col>
-          <Col md={6}>
-            <PlayListView
-              playlist={playlist.get('playlist')}
-              active={playlist.get('active')}
-              play={play}
-            />
-          </Col>
-          <Col md={3}>
-            <InfoView currentTrack={player.currentTrack} />
-          </Col>
-        </Row>
-        <Row>
-          <PlayerView
-            playerState={player.get('state')}
-            currentTrack={player.get('currentTrack')}
-            pause={pause}
-            resume={resume}
-            playNext={playNext}
-            playPrevious={playPrevious}
+function App({
+  library, playlist, player, toggle, addToPlayList,
+  play, playNext, playPrevious, pause, resume,
+}) {
+  return (
+    <Grid className="fill-screen">
+      <Row className="app-bar">
+        <h2>hope</h2> <i> (dev version)</i>
+      </Row>
+      <Row className="main">
+        <Col md={3}>
+          <LibraryView
+            sources={library.get('sources')}
+            toggle={toggle}
+            isExpanded={(id) => library.get('expanded').has(id)}
+            addToPlayList={addToPlayList}
           />
-        </Row>
-      </Grid>
-    );
-  }
+        </Col>
+        <Col md={6}>
+          <PlayListView
+            playlist={playlist.get('playlist')}
+            active={playlist.get('active')}
+            play={play}
+          />
+        </Col>
+        <Col md={3}>
+          <InfoView currentTrack={player.currentTrack} />
+        </Col>
+      </Row>
+      <Row>
+        <PlayerView
+          playerState={player.get('state')}
+          currentTrack={player.get('currentTrack')}
+          pause={pause}
+          resume={resume}
+          playNext={playNext}
+          playPrevious={playPrevious}
+        />
+      </Row>
+    </Grid>
+  );
 }
 
 function mapStateToProps(state) {

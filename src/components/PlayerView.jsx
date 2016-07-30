@@ -3,7 +3,7 @@ import React from 'react';
 import Player from './Player';
 
 export default ({ currentTrack, playerState, stream, pause, resume,
-    playNext, playPrevious}) =>
+    playNext, playPrevious }) =>
   <Player
     currentTrack={currentTrack}
     playerState={playerState}

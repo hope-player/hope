@@ -7,23 +7,23 @@ export function libraryFromJS(js) {
     return Immutable.Seq(js).map(libraryFromJS).toList();
   } else if ('type' in js && js.type === 'album') {
     const result = Immutable
-          .Seq(js)
-          .map(libraryFromJS)
-          .toMap()
-          .update(
-            'children',
-            children =>
-              children.sort(
-                (a, b) => {
-                  const aNo = a.getIn(['metadata', 'no']);
-                  const bNo = b.getIn(['metadata', 'no']);
-                  if (aNo > bNo) {
-                    return 1;
-                  } else if (aNo < bNo) {
-                    return -1;
-                  }
-                  return 0;
-                }));
+      .Seq(js)
+      .map(libraryFromJS)
+      .toMap()
+      .update(
+        'children',
+        children =>
+          children.sort(
+            (a, b) => {
+              const aNo = a.getIn(['metadata', 'no']);
+              const bNo = b.getIn(['metadata', 'no']);
+              if (aNo > bNo) {
+                return 1;
+              } else if (aNo < bNo) {
+                return -1;
+              }
+              return 0;
+            }));
     return result;
   }
   return Immutable.Seq(js).map(libraryFromJS).toMap();
