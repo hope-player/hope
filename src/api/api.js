@@ -1,5 +1,4 @@
 import axios from 'axios';
-import lVState from '../state/LibraryViewState';
 
 class Api {
   constructor() {
@@ -10,6 +9,8 @@ class Api {
     this.wsConnection = new WebSocket('ws://127.0.0.1:8080/ws');
     this.wsConnection.onmessage = this.handleMessage.bind(this);  // *this* should point to an Api class instance
 
+    this.getAvailableSources = this.getAvailableSources.bind(this);
+    this.getSource = this.getSource.bind(this);
     this.pause = this.pause.bind(this);
     this.resume = this.resume.bind(this);
   }
@@ -32,15 +33,12 @@ class Api {
     this.listeners.set(event, oldListeners);
   }
 
-  initLibrary() {
-    axios.get(`${this.root}/available_sources`)
-      .then(sources => {
-        sources.data.forEach(source => {
-          axios.get(`${this.root}/library/${source}`)
-            .then(library => lVState.addSource(source, library.data));
-        });
-      })
-      .catch(error => { console.log(error); }); // TODO: error handling
+  getAvailableSources() {
+    return axios.get(`${this.root}/available_sources`);
+  }
+
+  getSource(source) {
+    return axios.get(`${this.root}/library/${source}`);
   }
 
   play(source, trackId) {
@@ -70,5 +68,4 @@ class Api {
 }
 
 const singleton = new Api();
-singleton.initLibrary();
 export default singleton;

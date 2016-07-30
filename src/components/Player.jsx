@@ -1,7 +1,6 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 
-@observer export default class Player extends React.Component {
+export default class Player extends React.Component {
   renderPlayer() {
     const { controls, currentTrack } = this.props;
     if (currentTrack) {
