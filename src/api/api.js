@@ -1,19 +1,5 @@
 import axios from 'axios';
 
-function sendWSPromise(method, params) {
-  return new Promise((resolve, reject) => {
-    try {
-      this.wsConnection.send(JSON.stringify({
-        method,
-        params,
-      }));
-      resolve();
-    } catch (e) {
-      reject(e);
-    }
-  });
-}
-
 class Api {
   constructor() {
     this.root = 'http://127.0.0.1:8080';
@@ -23,6 +9,7 @@ class Api {
     this.wsConnection = new WebSocket('ws://127.0.0.1:8080/ws');
     this.wsConnection.onmessage = this.handleMessage.bind(this);
 
+    this.sendWSPromise = this.sendWSPromise.bind(this);
     this.getAvailableSources = this.getAvailableSources.bind(this);
     this.getSource = this.getSource.bind(this);
     this.play = this.play.bind(this);
@@ -30,6 +17,19 @@ class Api {
     this.resume = this.resume.bind(this);
   }
 
+  sendWSPromise(method, params) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.wsConnection.send(JSON.stringify({
+          method,
+          params,
+        }));
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
   handleMessage(message) {
     const parsed = JSON.parse(message.data);
     if (this.listeners.has(parsed.event)) {
@@ -57,18 +57,17 @@ class Api {
   }
 
   play(source, trackId) {
-    sendWSPromise('play', [source, trackId]);
+    this.sendWSPromise('play', [source, trackId]);
   }
 
   pause() {
-    sendWSPromise('pause', []);
+    this.sendWSPromise('pause', []);
   }
 
   resume() {
-    sendWSPromise('resume', []);
+    this.sendWSPromise('resume', []);
   }
 }
 
 const singleton = new Api();
-singleton.initLibrary();
 export default singleton;

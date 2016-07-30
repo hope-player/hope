@@ -44,22 +44,21 @@ function* playRelative(action) {
   yield put({ type: 'PLAY_REQUESTED', track, index });
 }
 
-function* pause() {
+function* resumePause(method, success, failure) {
   try {
-    yield call(Api.pause);
-    yield put({ type: 'PAUSE_SUCCEEDED' });
+    yield call(Api[method]);
+    yield put({ type: success });
   } catch (e) {
-    yield put({ type: 'PAUSE_FAILED' });
+    yield put({ type: failure });
   }
 }
 
+function* pause() {
+  yield resumePause('pause', 'PAUSE_SUCCEEDED', 'PAUSE_FAILED');
+}
+
 function* resume() {
-  try {
-    yield call(Api.resume);
-    yield put({ type: 'RESUME_SUCCEEDED' });
-  } catch (e) {
-    yield put({ type: 'RESUME_FAILED' });
-  }
+  yield resumePause('resume', 'RESUME_SUCCEEDED', 'RESUME_FAILED');
 }
 
 function* mainSaga() {
