@@ -7,7 +7,7 @@ class Api {
     this.listeners = new Map();
 
     this.wsConnection = new WebSocket('ws://127.0.0.1:8080/ws');
-    this.wsConnection.onmessage = this.handleMessage.bind(this);  // *this* should point to an Api class instance
+    this.wsConnection.onmessage = this.handleMessage.bind(this);
 
     this.getAvailableSources = this.getAvailableSources.bind(this);
     this.getSource = this.getSource.bind(this);
@@ -57,21 +57,29 @@ class Api {
   }
 
   pause() {
-    this.wsConnection.send(JSON.stringify({
-      method: 'pause',
-    }));
+    return new Promise((resolve, reject) => {
+      try {
+        this.wsConnection.send(JSON.stringify({
+          method: 'pause',
+        }));
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 
   resume() {
-    this.wsConnection.send(JSON.stringify({
-      method: 'resume',
-    }));
-  }
-
-
-  addTrack(source, trackId, callback) {
-    fetch(`${this.root}/media/add/${source}/${trackId}`)
-      .then(response => callback(response));
+    return new Promise((resolve, reject) => {
+      try {
+        this.wsConnection.send(JSON.stringify({
+          method: 'resume',
+        }));
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 }
 

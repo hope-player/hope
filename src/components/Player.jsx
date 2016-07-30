@@ -2,14 +2,14 @@ import React from 'react';
 
 export default class Player extends React.Component {
   renderPlayer() {
-    const { controls, currentTrack } = this.props;
+    const { pause, resume, playNext, playPrevious, currentTrack } = this.props;
     if (currentTrack) {
       return (
         <div>
-          <a onClick={controls.pause}>pause</a>
-          <a onClick={controls.resume}>resume</a>
-          <a onClick={controls.next}>next</a>
-          <a onClick={controls.previous}>prev</a>
+          <a onClick={pause}>pause</a>
+          <a onClick={resume}>resume</a>
+          <a onClick={playNext}>next</a>
+          <a onClick={playPrevious}>prev</a>
           {currentTrack.get('name')}
         </div>
       );

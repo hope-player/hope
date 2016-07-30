@@ -1,9 +1,15 @@
-export function play(source, id, index) {
+export function play(track, index) {
   return {
     type: 'PLAY_REQUESTED',
-    source,
-    id,
+    track,
     index,
+  };
+}
+
+export function playRelative(offset) {
+  return {
+    type: 'PLAY_RELATIVE',
+    offset,
   };
 }
 

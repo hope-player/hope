@@ -7,8 +7,7 @@ export default class PlayListViewsItem extends React.Component {
   }
 
   play() {
-    this.props.play(this.props.track.get('source'), this.props.track.get('id'),
-      this.props.index);
+    this.props.play(this.props.track, this.props.index);
   }
 
   render() : React.Element {

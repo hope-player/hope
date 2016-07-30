@@ -8,7 +8,8 @@ import InfoView from '../components/InfoView';
 import PlayerView from '../components/PlayerView';
 
 import { toggle } from '../actions/LibraryActions';
-import { addToPlayList, play } from '../actions/PlayListActions';
+import { addToPlayList, play, playRelative } from '../actions/PlayListActions';
+import { pause, resume } from '../actions/PlayerActions';
 
 import '../api/api';
 
@@ -19,7 +20,8 @@ import '../styles/icons.css';
 class App extends React.Component {
   render() {
     const { library, playlist, player,
-      toggle, addToPlayList, play } = this.props;
+      toggle, addToPlayList, play, playNext, playPrevious,
+      pause, resume } = this.props;
     return (
       <Grid className="fill-screen">
         <Row className="app-bar">
@@ -47,9 +49,12 @@ class App extends React.Component {
         </Row>
         <Row>
           <PlayerView
-            playerState={player.state}
-            currentTrack={player.currentTrack}
-            controls={player.controls}
+            playerState={player.get('state')}
+            currentTrack={player.get('currentTrack')}
+            pause={pause}
+            resume={resume}
+            playNext={playNext}
+            playPrevious={playPrevious}
           />
         </Row>
       </Grid>
@@ -70,6 +75,10 @@ function mapDispatchToProps(dispatch) {
     toggle: (id) => dispatch(toggle(id)),
     addToPlayList: (track) => dispatch(addToPlayList(track)),
     play: (source, id, index) => dispatch(play(source, id, index)),
+    playNext: () => dispatch(playRelative(1)),
+    playPrevious: () => dispatch(playRelative(-1)),
+    pause: () => dispatch(pause()),
+    resume: () => dispatch(resume()),
   };
 }
 
