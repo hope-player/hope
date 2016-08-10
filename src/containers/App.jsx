@@ -8,11 +8,13 @@ import PlayerView from '../components/PlayerView';
 
 import { toggle } from '../actions/LibraryActions';
 import { addToPlayList, play, playRelative } from '../actions/PlayListActions';
-import { pause, resume } from '../actions/PlayerActions';
+import { pause, resume, timeChanged } from '../actions/PlayerActions';
+
+import Player from '../media/mpv';
 
 function App({
   library, playlist, player, toggle, addToPlayList,
-  play, playNext, playPrevious, pause, resume,
+  play, playNext, playPrevious, pause, resume, timeChanged,
 }) {
   return (
     <div className="fill-screen">
@@ -42,10 +44,15 @@ function App({
         <PlayerView
           playerState={player.get('state')}
           currentTrack={player.get('currentTrack')}
+          duration={player.get('duration')}
           pause={pause}
           resume={resume}
           playNext={playNext}
           playPrevious={playPrevious}
+          time={player.get('time')}
+          getTime={() => Player.getTime((time) => {
+            timeChanged(time);
+          })}
         />
       </div>
     </div>
@@ -69,6 +76,7 @@ function mapDispatchToProps(dispatch) {
     playPrevious: () => dispatch(playRelative(-1)),
     pause: () => dispatch(pause()),
     resume: () => dispatch(resume()),
+    timeChanged: (time) => dispatch(timeChanged(time)),
   };
 }
 

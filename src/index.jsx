@@ -10,7 +10,7 @@ import reducer from './reducers/root';
 import saga from './sagas/sagas';
 
 import { initLibrary } from './actions/LibraryActions';
-import { stateChanged } from './actions/PlayerActions';
+import { stateChanged, durationChanged } from './actions/PlayerActions';
 import { playRelative } from './actions/PlayListActions';
 
 import Library from './library/library';
@@ -32,6 +32,13 @@ Player.addListener('pause', () => store.dispatch(stateChanged('paused')));
 Player.addListener('unpause', () => store.dispatch(stateChanged('playing')));
 Player.addListener('playback-restart', () => store.dispatch(stateChanged('playing')));
 Player.addListener('idle', () => store.dispatch(playRelative(1)));
+Player.addListener('property-change', (data) => {
+  switch (data.name) {
+    case 'duration':
+      store.dispatch(durationChanged(data.data));
+      break;
+  }
+});
 
 render(
   <Provider store={store}>

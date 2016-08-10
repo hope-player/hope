@@ -21,4 +21,7 @@
   direction: ltr;
 
   text-rendering: optimizeLegibility;
+
+  -webkit-user-select: none;
+  user-select: none;
 }

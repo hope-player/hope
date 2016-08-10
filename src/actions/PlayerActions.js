@@ -16,3 +16,17 @@ export function stateChanged(state) {
     state,
   };
 }
+
+export function durationChanged(duration) {
+  return {
+    type: 'DURATION_CHANGED',
+    duration,
+  };
+}
+
+export function timeChanged(time) {
+  return {
+    type: 'TIME_CHANGED',
+    time,
+  };
+}

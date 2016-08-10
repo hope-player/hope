@@ -1,6 +1,19 @@
 import React from 'react';
 
 export default class Player extends React.Component {
+  constructor(props) {
+    super(props);
+    setInterval(() => { if (this.props.playerState === 'playing') this.setState({ time: this.state.time + 0.1 }); }, 100);
+    setInterval(() => { this.props.getTime(); }, 1000);
+    this.state = {
+      time: 0,
+    };
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({ time: props.time });
+  }
+
   renderPlayer() {
     const { pause, resume, playNext, playPrevious, currentTrack, playerState } = this.props;
     if (currentTrack) {
@@ -12,7 +25,7 @@ export default class Player extends React.Component {
               if (playerState === 'playing') {
                 return <a className="material-icons player-controls" onClick={pause}>pause_circle_outline</a>;
               } else if (playerState === 'stopped' || playerState === 'paused') {
-                return <a className="material-icons player-controls" onClick={resume}>play_circle_outline</a>
+                return <a className="material-icons player-controls" onClick={resume}>play_circle_outline</a>;
               }
               return <a className="material-icons player-controls">help_outline</a>;
             })()
@@ -26,10 +39,11 @@ export default class Player extends React.Component {
   }
 
   render() : React.Element {
-    const { playerState } = this.props;
+    const { duration } = this.props;
     return (
       <div>
         {this.renderPlayer()}
+        <div style={{ backgroundColor: 'white', height: '50px', width: `${100 * this.state.time / duration}%`, borderRight: '4px solid #CCC' }} />
       </div>
     );
   }

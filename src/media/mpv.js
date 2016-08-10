@@ -7,6 +7,7 @@ class Mpv {
     this.client.connect('/tmp/hope-mpv-socket');
 
     this.listeners = Immutable.Map();
+    this.expectants = Immutable.Map();
 
     this.client.on('data', rawData => {
       rawData.toString().split('\n').forEach((item) => {
@@ -17,8 +18,9 @@ class Mpv {
               this.listeners.get(data.event).forEach(listener => {
                 listener(data);
               });
-            } else {
-              console.log(data.event);
+            } else if ('request_id' in data && this.expectants.has(data.request_id)) {
+              this.expectants.get(data.request_id)(data.data);
+              this.expectants.delete(data.request_id);
             }
           } catch (e) {
             console.log(e);
@@ -26,21 +28,13 @@ class Mpv {
         }
       });
     });
-
-    this.client.on('end', () => {
-      console.log('Connection ended');
-    });
-
-    this.client.on('close', () => {
-      console.log('Connection closed');
-    });
-
-    this.client.on('connect', () => { console.log('connected'); });
-
+    this.client.write('{ "command": ["observe_property", 1, "duration"] }');
     this.addListener = this.addListener.bind(this);
+    this.addExpectant = this.addExpectant.bind(this);
     this.play = this.play.bind(this);
     this.pause = this.pause.bind(this);
     this.resume = this.resume.bind(this);
+    this.getTime = this.getTime.bind(this);
   }
 
   addListener(event, listener) {
@@ -50,6 +44,15 @@ class Mpv {
     }
     oldListeners.push(listener);
     this.listeners = this.listeners.set(event, oldListeners);
+  }
+
+  addExpectant(requestId, expectant) {
+    this.expectants = this.expectants.set(requestId, expectant);
+  }
+
+  getTime(callback) {
+    this.client.write('{ "command": ["get_property", "time-pos"], "request_id": 8 }\n');
+    this.addExpectant(8, callback);
   }
 
   play(uri) {
