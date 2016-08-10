@@ -45,10 +45,13 @@ export class LibraryViewItem extends React.Component {
   renderExpand() {
     const { node } = this.props;
     let result = null;
+    if (node.get('type') === 'track') {
+      return result;
+    }
     if (node.get('expanded')) {
-      result = <a className="icon-expand_less" onClick={this.toggle} />;
+      result = <a className="material-icons" onClick={this.toggle}>expand_less</a>;
     } else {
-      result = <a className="icon-expand_more" onClick={this.toggle} />;
+      result = <a className="material-icons" onClick={this.toggle}>expand_more</a>;
     }
     return result;
   }
@@ -69,7 +72,7 @@ export class LibraryViewItem extends React.Component {
           {
             node.get('name')
           }
-          <a className="icon-add playlist-add" onClick={this.addToPlayList} />
+          <a className="material-icons playlist-add" onClick={this.addToPlayList}>add</a>
         </div>
         {
           this.renderChildren()
