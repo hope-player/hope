@@ -31,7 +31,7 @@ store.dispatch(initLibrary());
 Player.addListener('pause', () => store.dispatch(stateChanged('paused')));
 Player.addListener('unpause', () => store.dispatch(stateChanged('playing')));
 Player.addListener('playback-restart', () => store.dispatch(stateChanged('playing')));
-Player.addListener('end-file', () => store.dispatch(playRelative(1)));
+Player.addListener('idle', () => store.dispatch(playRelative(1)));
 
 render(
   <Provider store={store}>
