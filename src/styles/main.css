@@ -108,3 +108,8 @@ body {
 .active {
   font-weight: bold;
 }
+
+.player-controls {
+  font-size: 48px !important;
+  cursor: pointer;
+}
