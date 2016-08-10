@@ -19,7 +19,7 @@ function App({
   return (
     <div className="fill-screen">
       <div className="app-bar">
-        <h2>hope</h2>
+        <h3>hope</h3>
       </div>
       <div className="main">
         <div>

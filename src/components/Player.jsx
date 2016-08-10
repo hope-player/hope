@@ -18,19 +18,19 @@ export default class Player extends React.Component {
     const { pause, resume, playNext, playPrevious, currentTrack, playerState } = this.props;
     if (currentTrack) {
       return (
-        <div>
-          <a className="material-icons player-controls" onClick={playPrevious}>skip_previous</a>
+        <div className="player-controls">
+          <a className="material-icons player-control" onClick={playPrevious}>skip_previous</a>
           {
             (() => {
               if (playerState === 'playing') {
-                return <a className="material-icons player-controls" onClick={pause}>pause_circle_outline</a>;
+                return <a className="material-icons player-control" onClick={pause}>pause_circle_outline</a>;
               } else if (playerState === 'stopped' || playerState === 'paused') {
-                return <a className="material-icons player-controls" onClick={resume}>play_circle_outline</a>;
+                return <a className="material-icons player-control" onClick={resume}>play_circle_outline</a>;
               }
-              return <a className="material-icons player-controls">help_outline</a>;
+              return <a className="material-icons player-control">help_outline</a>;
             })()
           }
-          <a className="material-icons player-controls" onClick={playNext}>skip_next</a>
+          <a className="material-icons player-control" onClick={playNext}>skip_next</a>
           {currentTrack.get('name')}
         </div>
       );
@@ -41,9 +41,14 @@ export default class Player extends React.Component {
   render() : React.Element {
     const { duration } = this.props;
     return (
-      <div>
+      <div className="player-view">
         {this.renderPlayer()}
-        <div style={{ backgroundColor: 'white', height: '50px', width: `${100 * this.state.time / duration}%`, borderRight: '4px solid #CCC' }} />
+        <div className="player-progress">
+          <div
+            className="player-progress-bar"
+            style={{ width: `${100 * this.state.time / duration}%` }}
+          ></div>
+        </div>
       </div>
     );
   }
