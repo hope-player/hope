@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import library from './library';
+import { library } from './library';
 import playlist from './playlist';
 import player from './player';
 

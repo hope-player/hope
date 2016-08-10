@@ -9,3 +9,10 @@ export function resume() {
     type: 'RESUME_REQUESTED',
   };
 }
+
+export function stateChanged(state) {
+  return {
+    type: 'STATE_CHANGE_REQUESTED',
+    state,
+  };
+}

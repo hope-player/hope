@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import LibraryView from '../components/LibraryView';
 import PlayListView from '../components/PlayListView';
@@ -11,42 +10,35 @@ import { toggle } from '../actions/LibraryActions';
 import { addToPlayList, play, playRelative } from '../actions/PlayListActions';
 import { pause, resume } from '../actions/PlayerActions';
 
-import '../api/api';
-
-import 'normalize.css';
-import '../styles/main.css';
-import '../styles/icons.css';
-
 function App({
   library, playlist, player, toggle, addToPlayList,
   play, playNext, playPrevious, pause, resume,
 }) {
   return (
-    <Grid className="fill-screen">
-      <Row className="app-bar">
-        <h2>hope</h2> <i> (dev version)</i>
-      </Row>
-      <Row className="main">
-        <Col md={3}>
+    <div className="fill-screen">
+      <div className="app-bar">
+        <h2>hope</h2>
+      </div>
+      <div className="main">
+        <div>
           <LibraryView
-            sources={library.get('sources')}
+            root={library.get('sources')}
             toggle={toggle}
-            isExpanded={(id) => library.get('expanded').has(id)}
             addToPlayList={addToPlayList}
           />
-        </Col>
-        <Col md={6}>
+        </div>
+        <div>
           <PlayListView
             playlist={playlist.get('playlist')}
             active={playlist.get('active')}
             play={play}
           />
-        </Col>
-        <Col md={3}>
+        </div>
+        <div>
           <InfoView currentTrack={player.currentTrack} />
-        </Col>
-      </Row>
-      <Row>
+        </div>
+      </div>
+      <div>
         <PlayerView
           playerState={player.get('state')}
           currentTrack={player.get('currentTrack')}
@@ -55,8 +47,8 @@ function App({
           playNext={playNext}
           playPrevious={playPrevious}
         />
-      </Row>
-    </Grid>
+      </div>
+    </div>
   );
 }
 
@@ -70,7 +62,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggle: (id) => dispatch(toggle(id)),
+    toggle: (node) => dispatch(toggle(node)),
     addToPlayList: (track) => dispatch(addToPlayList(track)),
     play: (source, id, index) => dispatch(play(source, id, index)),
     playNext: () => dispatch(playRelative(1)),

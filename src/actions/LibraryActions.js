@@ -1,6 +1,6 @@
 export function initLibrary() {
   return {
-    type: 'LIBRARY_INIT_REQUESTED',
+    type: 'LIBRARY_INIT',
   };
 }
 
@@ -8,6 +8,6 @@ export function requestSource(source) {
   return { type: 'SOURCE_FETCH_REQUESTED', source };
 }
 
-export function toggle(id) {
-  return { type: 'TOGGLE', id };
+export function toggle(node) {
+  return { type: 'TOGGLE_REQUESTED', node };
 }

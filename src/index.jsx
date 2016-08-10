@@ -10,6 +10,11 @@ import reducer from './reducers/root';
 import saga from './sagas/sagas';
 
 import { initLibrary } from './actions/LibraryActions';
+import { stateChanged } from './actions/PlayerActions';
+
+import Library from './library/library';
+import Player from './media/mpv';
+// import './utils/setup-dev'; // setup devtools extensions
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -18,9 +23,13 @@ const store = createStore(
   window.devToolsExtension && window.devToolsExtension(),
   applyMiddleware(sagaMiddleware)
 );
-
+Library.connect(store);
+Library.init();
 sagaMiddleware.run(saga);
 store.dispatch(initLibrary());
+Player.addListener('pause', () => store.dispatch(stateChanged('paused')));
+Player.addListener('unpause', () => store.dispatch(stateChanged('playing')));
+Player.addListener('playback-restart', () => store.dispatch(stateChanged('playing')));
 
 render(
   <Provider store={store}>

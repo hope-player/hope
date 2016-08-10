@@ -8,7 +8,7 @@ export class LibraryViewItem extends React.Component {
   }
 
   toggle() {
-    this.props.toggle(this.props.node.get('id'));
+    this.props.toggle(this.props.node);
   }
 
   addToPlayList() {
@@ -26,16 +26,15 @@ export class LibraryViewItem extends React.Component {
   }
 
   renderChildren() {
-    const { node, isExpanded, toggle, addToPlayList } = this.props;
+    const { node, toggle, addToPlayList } = this.props;
     const result = [];
-    if (isExpanded(node.get('id'))) {
+    if (node.get('expanded')) {
       node.get('children').forEach(child => {
         result.push(
           <LibraryViewItem
             key={`lvi_${child.get('id')}`}
             node={child}
             toggle={toggle}
-            isExpanded={isExpanded}
             addToPlayList={addToPlayList}
           />);
       });
@@ -44,19 +43,17 @@ export class LibraryViewItem extends React.Component {
   }
 
   renderExpand() {
-    const { node, isExpanded, toggle } = this.props;
+    const { node } = this.props;
     let result = null;
-    if (node.get('children').size) {
-      if (isExpanded(node.get('id'))) {
-        result = <a className="icon-expand_less" onClick={this.toggle} />;
-      } else {
-        result = <a className="icon-expand_more" onClick={this.toggle} />;
-      }
+    if (node.get('expanded')) {
+      result = <a className="icon-expand_less" onClick={this.toggle} />;
+    } else {
+      result = <a className="icon-expand_more" onClick={this.toggle} />;
     }
     return result;
   }
 
-  render() : React.Element {
+  render() {
     const { node } = this.props;
     return (
       <div className={"library-view-item"}>

@@ -1,38 +1,22 @@
-import { takeEvery } from 'redux-saga';
+import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 
-import Api from '../api/api';
+import Library from '../library/library';
+import Player from '../media/mpv';
 
-function* addSource(action) {
-  try {
-    const library = yield call(Api.getSource, action.source);
-    yield put({
-      type: 'SOURCE_FETCH_SUCCEEDED',
-      library: library.data,
-      source: action.source,
-    });
-  } catch (e) {
-    yield put({ type: 'SOURCE_FETCH_FAILED', message: e.message });
-  }
-}
+import { rootNode } from '../reducers/library';
+
 
 function* initLibrary() {
-  try {
-    const sources = yield call(Api.getAvailableSources);
-    for (const source of sources.data) {
-      yield put({ type: 'SOURCE_FETCH_REQUESTED', source });
-    }
-    yield put({ type: 'LIBRARY_INIT_SUCCEEDED' });
-  } catch (e) {
-    yield put({ type: 'LIBRARY_INIT_FAILED', message: e.message });
-  }
+  yield put({ type: 'TOGGLE_REQUESTED', node: null });
 }
 
 function* play(action) {
   try {
-    yield call(Api.play, action.track.get('source'), action.track.get('id'));
+    const uri = yield call(Library.getStream, action.track.get('source'), action.track.get('id'));
+    yield call(Player.play, uri);
     yield put({ type: 'PLAY_SUCCEEDED', index: action.index });
-    yield put({ type: 'CURRENT_TRACK_UPDATE', track: action.track });
+    yield put({ type: 'CURRENT_TRACK_UPDATED', track: action.track });
   } catch (e) {
     yield put({ type: 'PLAY_FAILED', message: e.message });
   }
@@ -46,10 +30,11 @@ function* playRelative(action) {
 
 function* resumePause(method, success, failure) {
   try {
-    yield call(Api[method]);
+    yield call(Player[method]);
     yield put({ type: success });
   } catch (e) {
-    yield put({ type: failure });
+    console.log(e);
+    yield put({ type: failure, message: e.message });
   }
 }
 
@@ -61,14 +46,42 @@ function* resume() {
   yield resumePause('resume', 'RESUME_SUCCEEDED', 'RESUME_FAILED');
 }
 
+function* changeState(action) {
+  yield put({ type: 'STATE_CHANGE_SUCCEEDED', state: action.state });
+}
+
+function* toggle(action) {
+  try {
+    let node = action.node;
+    if (node === null) {
+      node = rootNode;
+    }
+    if (node.expanded === true) {
+      yield put({
+        type: 'TOGGLE_SUCCEEDED',
+        data: null,
+        node,
+      });
+    } else {
+      const data = yield call(Library.expand, node.get('source'), node.get('type'), node.get('id'));
+      yield put({
+        type: 'TOGGLE_SUCCEEDED', data, node,
+      });
+    }
+  } catch (e) {
+    yield put({ type: 'TOGGLE_FAILED', message: e.message });
+  }
+}
+
 function* mainSaga() {
   yield [
-    takeEvery('LIBRARY_INIT_REQUESTED', initLibrary),
-    takeEvery('SOURCE_FETCH_REQUESTED', addSource),
+    takeEvery('LIBRARY_INIT', initLibrary),
     takeEvery('PLAY_REQUESTED', play),
     takeEvery('PLAY_RELATIVE', playRelative),
     takeEvery('PAUSE_REQUESTED', pause),
     takeEvery('RESUME_REQUESTED', resume),
+    takeEvery('TOGGLE_REQUESTED', toggle),
+    takeLatest('STATE_CHANGE_REQUESTED', changeState),
   ];
 }
 

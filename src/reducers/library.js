@@ -1,72 +1,65 @@
 import Immutable from 'immutable';
 
-const defaultState = new Immutable.Map({
-  lastId: 0,
-  expanded: new Immutable.Set(),
-  sources: new Immutable.Map(),
+export const rootNode = Immutable.Map({
+  name: 'root',
+  type: 'root',
+  localId: 0,
+  id: 'root',
+  path: [],
+  source: 'none',
+  expanded: false,
+  metadata: Immutable.Map(),
+  children: Immutable.OrderedMap(),
 });
 
-function libraryFromJS(js) {
-  if (typeof js !== 'object' || js === null) {
-    return js;
-  } else if (Array.isArray(js)) {
-    return Immutable.Seq(js).map(libraryFromJS).toList();
-  } else if ('type' in js && js.type === 'album') {
-    const result = Immutable
-      .Seq(js)
-      .map(libraryFromJS)
-      .toMap()
-      .update(
+const defaultState = Immutable.Map({
+  lastId: 0,
+  sources: rootNode,
+});
+
+function updateLibrary(state, path, data) {
+  return state.withMutations(mutableState => {
+    let lastId = mutableState.get('lastId');
+    mutableState.updateIn(
+      ['sources'].concat(path),
+      (node) => node.update(
         'children',
-        children =>
-          children.sort(
-            (a, b) => {
-              const aNo = a.getIn(['metadata', 'no']);
-              const bNo = b.getIn(['metadata', 'no']);
-              if (aNo > bNo) {
-                return 1;
-              } else if (aNo < bNo) {
-                return -1;
-              }
-              return 0;
+        (children) => children.withMutations(mutableChildren => {
+          data.forEach(item => {
+            mutableChildren.set(item.id, Immutable.Map({
+              name: item.name,
+              type: item.type,
+              localId: ++lastId,
+              id: item.id,
+              path: node.get('path').concat(['children', item.id]),
+              source: item.type === 'source' ? item.name : node.get('source'),
+              expanded: false,
+              metadata: Immutable.Map(item.metadata),
+              children: Immutable.OrderedMap(),
             }));
-    return result;
-  }
-  return Immutable.Seq(js).map(libraryFromJS).toMap();
+          });
+        })
+      ).set('expanded', true)
+    );
+  });
 }
 
-function librarySorter(a, b) {
-  const aName = a.get('name');
-  const bName = b.get('name');
-  if (aName && bName) {
-    return aName.localeCompare(bName);
-  }
-  return 0;
-}
-
-export default function (state = defaultState, action) {
+export function library(state = defaultState, action) {
   switch (action.type) {
-    case 'SOURCE_FETCH_SUCCEEDED':
-      return state.withMutations(mutableState => {
-        const lastId = mutableState.get('lastId') + 1;
-        mutableState.set('lastId', lastId);
-        mutableState.setIn(
-          ['sources', action.source],
-          new Immutable.Map({
-            name: action.source,
-            id: `source_${lastId}`,
-            metadata: {},
-            children:
-              libraryFromJS(action.library)
-                .sort(librarySorter),
-          })
+    case 'TOGGLE_SUCCEEDED':
+      if (action.node.get('expanded')) {
+        return state.updateIn(
+          ['sources'].concat(action.node.get('path')),
+          (node) => node
+            .set('expanded', false)
         );
-      });
-    case 'TOGGLE':
-      if (state.get('expanded').has(action.id)) {
-        return state.update('expanded', expanded => expanded.delete(action.id));
       }
-      return state.update('expanded', expanded => expanded.add(action.id));
+      return updateLibrary(state, action.node.get('path'), action.data);
+    case 'PROVIDER_ADDED':
+      if (state.getIn(['sources', 'expanded'])) {
+        return updateLibrary(state, [], [action.provider]);
+      }
+      return state;
     default:
       return state;
   }
