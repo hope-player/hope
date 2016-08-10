@@ -11,6 +11,7 @@ import saga from './sagas/sagas';
 
 import { initLibrary } from './actions/LibraryActions';
 import { stateChanged } from './actions/PlayerActions';
+import { playRelative } from './actions/PlayListActions';
 
 import Library from './library/library';
 import Player from './media/mpv';
@@ -30,6 +31,7 @@ store.dispatch(initLibrary());
 Player.addListener('pause', () => store.dispatch(stateChanged('paused')));
 Player.addListener('unpause', () => store.dispatch(stateChanged('playing')));
 Player.addListener('playback-restart', () => store.dispatch(stateChanged('playing')));
+Player.addListener('end-file', () => store.dispatch(playRelative(1)));
 
 render(
   <Provider store={store}>
