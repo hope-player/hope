@@ -83,7 +83,7 @@ function* _addToPlayList(node) {
   let children;
   let result = [];
   if (node.get('expanded')) {
-    children = node.get('children');
+    children = node.get('children').values();
   } else {
     children = yield call(Library.expand, node.get('source'), node.get('type'), node.get('id'));
   }
