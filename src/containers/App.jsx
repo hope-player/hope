@@ -19,7 +19,7 @@ function App({
   return (
     <div className="fill-screen">
       <div className="app-bar">
-        <h3>hope</h3>
+        <h2>hope</h2>
       </div>
       <div className="main">
         <div>
@@ -37,13 +37,12 @@ function App({
           />
         </div>
         <div>
-          <InfoView currentTrack={player.currentTrack} />
+          <InfoView currentTrack={player.get('currentTrack')} />
         </div>
       </div>
       <div>
         <PlayerView
           playerState={player.get('state')}
-          currentTrack={player.get('currentTrack')}
           duration={player.get('duration')}
           pause={pause}
           resume={resume}

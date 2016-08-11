@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default () =>
+export default ({ currentTrack }) =>
   <div className={"info-view"}>
-    <i>There will be an info</i>
+    {currentTrack.get('name')}
   </div>;

@@ -15,27 +15,23 @@ export default class Player extends React.Component {
   }
 
   renderPlayer() {
-    const { pause, resume, playNext, playPrevious, currentTrack, playerState } = this.props;
-    if (currentTrack) {
-      return (
-        <div className="player-controls">
-          <a className="material-icons player-control" onClick={playPrevious}>skip_previous</a>
-          {
-            (() => {
-              if (playerState === 'playing') {
-                return <a className="material-icons player-control" onClick={pause}>pause_circle_outline</a>;
-              } else if (playerState === 'stopped' || playerState === 'paused') {
-                return <a className="material-icons player-control" onClick={resume}>play_circle_outline</a>;
-              }
-              return <a className="material-icons player-control">help_outline</a>;
-            })()
-          }
-          <a className="material-icons player-control" onClick={playNext}>skip_next</a>
-          {currentTrack.get('name')}
-        </div>
-      );
-    }
-    return null;
+    const { pause, resume, playNext, playPrevious, playerState } = this.props;
+    return (
+      <div className="player-controls">
+        <a className="material-icons player-control" onClick={playPrevious}>skip_previous</a>
+        {
+          (() => {
+            if (playerState === 'playing') {
+              return <a className="material-icons player-control" onClick={pause}>pause_circle_outline</a>;
+            } else if (playerState === 'stopped' || playerState === 'paused') {
+              return <a className="material-icons player-control" onClick={resume}>play_circle_outline</a>;
+            }
+            return <a className="material-icons player-control">help_outline</a>;
+          })()
+        }
+        <a className="material-icons player-control" onClick={playNext}>skip_next</a>
+      </div>
+    );
   }
 
   render() : React.Element {

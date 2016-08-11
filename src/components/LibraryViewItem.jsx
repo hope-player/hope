@@ -56,10 +56,10 @@ export class LibraryViewItem extends React.Component {
     return result;
   }
 
-  render() {
+  renderHeader() {
     const { node } = this.props;
-    return (
-      <div className={"library-view-item"}>
+    if (node.get('type') !== 'root') {
+      return (
         <div className={"library-view-item-header"}>
           <div className="library-view-item-text">
             {
@@ -74,9 +74,16 @@ export class LibraryViewItem extends React.Component {
           }
           <a className="material-icons playlist-add" onClick={this.addToPlayList}>add</a>
         </div>
-        {
-          this.renderChildren()
-        }
+      );
+    }
+    return null;
+  }
+
+  render() {
+    return (
+      <div className={"library-view-item"}>
+        {this.renderHeader()}
+        {this.renderChildren()}
       </div>
     );
   }

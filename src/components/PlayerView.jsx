@@ -2,10 +2,9 @@ import React from 'react';
 
 import Player from './Player';
 
-export default ({ currentTrack, playerState, stream, pause, resume,
+export default ({ playerState, stream, pause, resume,
     playNext, playPrevious, duration, time, getTime }) =>
   <Player
-    currentTrack={currentTrack}
     playerState={playerState}
     stream={stream}
     pause={pause}
