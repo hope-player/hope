@@ -3,6 +3,7 @@ import BaseProvider from './base';
 export default class BeetsProvider extends BaseProvider {
   constructor(config) {
     super(config.db);
+    this.name = 'beets';
   }
 
   getStream(track) {

@@ -3,6 +3,7 @@ import sqlite3 from 'sqlite3';
 export default class BaseProvider {
   constructor(path) {
     this.db = new sqlite3.Database(path);
+    this.name = 'base';
   }
 
   init(callback) {
@@ -19,6 +20,7 @@ export default class BaseProvider {
               return {
                 id: row.albumartist,
                 name: row.albumartist,
+                source: this.name,
                 type: 'artist',
               };
             }));
@@ -42,6 +44,7 @@ export default class BaseProvider {
                 id: row.id,
                 name: row.album,
                 type: 'album',
+                source: this.name,
                 metadata: { name: row.album, artist },
               };
             }));
@@ -65,6 +68,7 @@ export default class BaseProvider {
                 id: row.id,
                 name: row.title,
                 type: 'track',
+                source: this.name,
                 metadata: {
                   title: row.title,
                   album: row.album,

@@ -1,5 +1,6 @@
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
+import Immutable from 'immutable';
 
 import Library from '../library/library';
 import Player from '../media/mpv';
@@ -73,6 +74,23 @@ function* toggle(action) {
   }
 }
 
+function* addToPlayList(action) {
+  if (action.node.get('type') === 'track') {
+    yield put({
+      type: 'ADD_TO_PLAYLIST_SUCCEEDED',
+      track: action.node,
+    });
+  } else {
+    const data = yield call(Library.expand, action.node.get('source'), action.node.get('type'), action.node.get('id'));
+    for (const item of data) {
+      yield put({
+        type: 'ADD_TO_PLAYLIST_REQUESTED',
+        node: Immutable.fromJS(item),
+      });
+    }
+  }
+}
+
 function* mainSaga() {
   yield [
     takeEvery('LIBRARY_INIT', initLibrary),
@@ -81,6 +99,7 @@ function* mainSaga() {
     takeEvery('PAUSE_REQUESTED', pause),
     takeEvery('RESUME_REQUESTED', resume),
     takeEvery('TOGGLE_REQUESTED', toggle),
+    takeEvery('ADD_TO_PLAYLIST_REQUESTED', addToPlayList),
     takeLatest('STATE_CHANGE_REQUESTED', changeState),
   ];
 }

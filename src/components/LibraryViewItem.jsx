@@ -16,13 +16,7 @@ export class LibraryViewItem extends React.Component {
   }
 
   addNodeToPlayList(node) {
-    if (node.get('type') === 'track') {
-      this.props.addToPlayList(node);
-    } else if (node.get('children').size) {
-      node.get('children').forEach(child => {
-        this.addNodeToPlayList(child);
-      });
-    }
+    this.props.addToPlayList(node);
   }
 
   renderChildren() {

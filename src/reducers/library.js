@@ -32,7 +32,7 @@ function updateLibrary(state, path, data) {
               localId: ++lastId,
               id: item.id,
               path: node.get('path').concat(['children', item.id]),
-              source: item.type === 'source' ? item.name : node.get('source'),
+              source: item.source,
               expanded: false,
               metadata: Immutable.Map(item.metadata),
               children: Immutable.OrderedMap(),

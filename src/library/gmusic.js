@@ -6,6 +6,7 @@ import BaseProvider from './base';
 export default class GMusicProvider extends BaseProvider {
   constructor(config) {
     super(config.db);
+    this.name = 'gmusic';
     this.gpm = new PlayMusic();
     this.init = this.init.bind(this);
     this.config = config;

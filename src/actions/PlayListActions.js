@@ -14,9 +14,9 @@ export function playRelative(offset) {
 }
 
 
-export function addToPlayList(track) {
+export function addToPlayList(node) {
   return {
-    type: 'ADD_TO_PLAYLIST',
-    track,
+    type: 'ADD_TO_PLAYLIST_REQUESTED',
+    node,
   };
 }

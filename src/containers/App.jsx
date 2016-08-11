@@ -69,7 +69,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     toggle: (node) => dispatch(toggle(node)),
-    addToPlayList: (track) => dispatch(addToPlayList(track)),
+    addToPlayList: (node) => dispatch(addToPlayList(node)),
     play: (source, id, index) => dispatch(play(source, id, index)),
     playNext: () => dispatch(playRelative(1)),
     playPrevious: () => dispatch(playRelative(-1)),

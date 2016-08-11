@@ -9,7 +9,7 @@ export default function (state = defaultState, action) {
   switch (action.type) {
     case 'PLAY_SUCCEEDED':
       return state.set('active', action.index);
-    case 'ADD_TO_PLAYLIST':
+    case 'ADD_TO_PLAYLIST_SUCCEEDED':
       return state.update('playlist', playlist => playlist.push(action.track));
     default:
       return state;
