@@ -1,5 +1,6 @@
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
+
 import Immutable from 'immutable';
 
 import Library from '../library/library';
@@ -74,21 +75,30 @@ function* toggle(action) {
   }
 }
 
-function* addToPlayList(action) {
-  if (action.node.get('type') === 'track') {
-    yield put({
-      type: 'ADD_TO_PLAYLIST_SUCCEEDED',
-      track: action.node,
-    });
-  } else {
-    const data = yield call(Library.expand, action.node.get('source'), action.node.get('type'), action.node.get('id'));
-    for (const item of data) {
-      yield put({
-        type: 'ADD_TO_PLAYLIST_REQUESTED',
-        node: Immutable.fromJS(item),
-      });
-    }
+function* _addToPlayList(node) {
+  if (node.get('type') === 'track') {
+    return [node];
   }
+  let children;
+  let result = [];
+  if (node.get('expanded')) {
+    children = node.get('children');
+  } else {
+    children = yield call(Library.expand, node.get('source'), node.get('type'), node.get('id'));
+  }
+  for (const child of children) {
+    const update = yield _addToPlayList(Immutable.fromJS(child));
+    result = result.concat(update);
+  }
+  return result;
+}
+
+function* addToPlayList(action) {
+  const result = yield _addToPlayList(action.node);
+  yield put({
+    type: 'ADD_TO_PLAYLIST_SUCCEEDED',
+    tracks: result,
+  });
 }
 
 function* mainSaga() {

@@ -10,7 +10,7 @@ export default function (state = defaultState, action) {
     case 'PLAY_SUCCEEDED':
       return state.set('active', action.index);
     case 'ADD_TO_PLAYLIST_SUCCEEDED':
-      return state.update('playlist', playlist => playlist.push(action.track));
+      return state.update('playlist', playlist => playlist.concat(action.tracks));
     default:
       return state;
   }
