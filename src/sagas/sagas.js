@@ -71,6 +71,7 @@ function* toggle(action) {
       });
     }
   } catch (e) {
+    console.log(e);
     yield put({ type: 'TOGGLE_FAILED', message: e.message });
   }
 }

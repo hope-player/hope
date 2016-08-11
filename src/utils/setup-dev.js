@@ -7,3 +7,7 @@ installExtension(REACT_DEVELOPER_TOOLS)
 installExtension(REDUX_DEVTOOLS)
     .then((name) => console.log(`Added Extension:  ${name}`))
     .catch((err) => console.log('An error occurred: ', err));
+
+installExtension('hgldghadipiblonfkkicmgcbbijnpeog') // immutable.js formatter
+  .then((name) => console.log(`Added Extension:  ${name}`))
+  .catch((err) => console.log('An error occurred: ', err));

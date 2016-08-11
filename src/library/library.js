@@ -38,21 +38,26 @@ class Library {
   addProvider(key, provider) {
     this.providers = this.providers.set(key, provider);
     if (this.store) {
-      this.store.dispatch({
-        type: 'PROVIDER_ADDED',
-        provider: {
-          id: key,
-          name: key,
-          type: 'source',
-        },
-      });
+      const providerNode = {
+        id: key,
+        name: key,
+        type: 'source',
+      };
+      this.getAllArtists(key)
+        .then((artists) => {
+          this.store.dispatch({
+            type: 'PROVIDER_ADDED',
+            provider: providerNode,
+            data: artists,
+          });
+        });
     }
   }
 
-  expand(source, type, id, onChange) {
+  expand(source, type, id) {
     switch (type) {
       case 'root':
-        return this.getAvailableSources(id, onChange);
+        return this.getAvailableSources(id);
       case 'source':
         return this.getAllArtists(id);
       case 'artist':

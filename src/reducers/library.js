@@ -14,6 +14,7 @@ export const rootNode = Immutable.Map({
 
 const defaultState = Immutable.Map({
   lastId: 0,
+  active: '',
   sources: rootNode,
 });
 
@@ -45,6 +46,7 @@ function updateLibrary(state, path, data) {
 }
 
 export function library(state = defaultState, action) {
+  let newState;
   switch (action.type) {
     case 'TOGGLE_SUCCEEDED':
       if (action.node.get('expanded')) {
@@ -56,10 +58,18 @@ export function library(state = defaultState, action) {
       }
       return updateLibrary(state, action.node.get('path'), action.data);
     case 'PROVIDER_ADDED':
-      if (state.getIn(['sources', 'expanded'])) {
-        return updateLibrary(state, [], [action.provider]);
+      newState = updateLibrary(
+        updateLibrary(state, [], [action.provider]),
+        ['children', action.provider.id],
+        action.data
+      );
+      if (newState.get('active') === '') {
+        return newState
+          .set('active', action.provider.name);
       }
-      return state;
+      return newState.setIn(['children', action.provider.id, 'expanded'], true);
+    case 'ACTIVE_CHANGE':
+      return state.set('active', action.library);
     default:
       return state;
   }

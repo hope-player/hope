@@ -51,8 +51,8 @@ export class LibraryViewItem extends React.Component {
   }
 
   renderHeader() {
-    const { node } = this.props;
-    if (node.get('type') !== 'root') {
+    const { root, node } = this.props;
+    if (!root) {
       return (
         <div className={"library-view-item-header"}>
           <div className="library-view-item-text">

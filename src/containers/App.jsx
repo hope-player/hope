@@ -6,7 +6,7 @@ import PlayListView from '../components/PlayListView';
 import InfoView from '../components/InfoView';
 import PlayerView from '../components/PlayerView';
 
-import { toggle } from '../actions/LibraryActions';
+import { toggle, changeActive } from '../actions/LibraryActions';
 import { addToPlayList, play, playRelative } from '../actions/PlayListActions';
 import { pause, resume, timeChanged } from '../actions/PlayerActions';
 
@@ -14,19 +14,18 @@ import Player from '../media/mpv';
 
 function App({
   library, playlist, player, toggle, addToPlayList,
-  play, playNext, playPrevious, pause, resume, timeChanged,
+  play, playNext, playPrevious, pause, resume, timeChanged, changeActive
 }) {
   return (
     <div className="fill-screen">
-      <div className="app-bar">
-        <h2>hope</h2>
-      </div>
       <div className="main">
         <div>
           <LibraryView
             root={library.get('sources')}
             toggle={toggle}
             addToPlayList={addToPlayList}
+            active={library.get('active')}
+            changeActive={changeActive}
           />
         </div>
         <div>
@@ -76,6 +75,7 @@ function mapDispatchToProps(dispatch) {
     pause: () => dispatch(pause()),
     resume: () => dispatch(resume()),
     timeChanged: (time) => dispatch(timeChanged(time)),
+    changeActive: (library) => dispatch(changeActive(library)),
   };
 }
 
