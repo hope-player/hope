@@ -1,17 +1,9 @@
 import React from 'react';
 
-export default class Player extends React.Component {
+export default class PlayerView extends React.Component {
   constructor(props) {
     super(props);
-    setInterval(() => { if (this.props.playerState === 'playing') this.setState({ time: this.state.time + 0.1 }); }, 100);
-    setInterval(() => { this.props.getTime(); }, 1000);
-    this.state = {
-      time: 0,
-    };
-  }
-
-  componentWillReceiveProps(props) {
-    this.setState({ time: props.time });
+    setInterval(() => { this.props.getTime(); }, 5000);
   }
 
   renderPlayer() {
@@ -22,9 +14,21 @@ export default class Player extends React.Component {
         {
           (() => {
             if (playerState === 'playing') {
-              return <a className="material-icons player-control" onClick={pause}>pause_circle_outline</a>;
+              return (
+                <a
+                  className="material-icons player-control"
+                  onClick={pause}
+                >
+                  pause_circle_outline
+                </a>);
             } else if (playerState === 'stopped' || playerState === 'paused') {
-              return <a className="material-icons player-control" onClick={resume}>play_circle_outline</a>;
+              return (
+              <a
+                className="material-icons player-control"
+                onClick={resume}
+              >
+                play_circle_outline
+              </a>);
             }
             return <a className="material-icons player-control">help_outline</a>;
           })()
@@ -34,15 +38,15 @@ export default class Player extends React.Component {
     );
   }
 
-  render() : React.Element {
-    const { duration } = this.props;
+  render() {
+    const { duration, time } = this.props;
     return (
       <div className="player-view">
         {this.renderPlayer()}
         <div className="player-progress">
           <div
             className="player-progress-bar"
-            style={{ width: `${100 * this.state.time / duration}%` }}
+            style={{ width: `${100 * time / duration}%` }}
           ></div>
         </div>
       </div>
