@@ -1,0 +1,122 @@
+@import "variables";
+@import "scrollbar";
+@import "icons";
+@import "node_modules/bootstrap/scss/bootstrap";
+
+html, body, #app, .container-fluid {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container-fluid {
+  @include make-container();
+
+  .main {
+    @include make-row();
+
+    .library-view {
+      @include make-col(3);
+
+      .library-tabs {
+        .library-tabs-item {
+          display: inline-block;
+          padding: 5px;
+          border: 3px solid $gray;
+          background-color: $gray-lighter;
+          cursor: pointer;
+        }
+
+        .library-tabs-item-active {
+          background-color: $brand-primary;
+        }
+
+        .library-tabs-item:hover {
+          border-color: $brand-primary;
+        }
+        width: 100%;
+        height: 35px;
+        background-color: $gray;
+      }
+
+      .library-tree {
+        .library-view-item {
+          .library-view-item-text {
+            display: inline;
+          }
+          .library-view-item-header {
+          }
+          .library-view-item-header:hover {
+            .playlist-add {
+              display: inline;
+            }
+          }
+
+          margin-left: 20px;
+          overflow-x: hidden;
+        }
+
+        .library-tabs-item:first-of-type {
+          margin-left: 0px;
+        }
+
+        height: 100%;
+        overflow-y: scroll;
+      }
+
+      height: calc(100% - #{$footer-height});
+      width: 100%;
+    }
+
+    .playlist-view {
+      @include make-col(6);
+
+      .playlist-view-header {
+      }
+
+      .playlist-view-body {
+      }
+      overflow-y: scroll;
+    }
+
+    .info-view {
+      @include make-col(3);
+    }
+
+    width: 100vw;
+    overflow-y: scroll;
+    height: calc(100% - #{$footer-height});
+  }
+
+  .footer {
+    @include make-row();
+
+    .player-view {
+      @include make-row();
+      .player-controls {
+        .player-control {
+          font-size: 50px !important;
+          cursor: pointer;
+        }
+        width: $player-controls-width;
+        margin-left: 15px;
+      }
+
+      .player-progress {
+        .player-progress-bar {
+          background-color: $gray-lightest;
+          height: 100%;
+          border-right: 10px solid $brand-primary;
+          transition: width 5s linear;
+        }
+        height: 15px;
+        width: calc(100vw - #{$player-controls-width} - 15px);
+        background-color: $gray;
+        margin-top: 15px;
+      }
+      width: 100vw;
+    }
+    width: 100vw;
+    height: $footer-height;
+  }
+}
