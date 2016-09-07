@@ -13,6 +13,7 @@ function renderTabs(root, active, changeActive) {
       <div
         className={className}
         onClick={() => changeActive(child.get('name'))}
+        key={`lv_tab_${child.get('localId')}`}
       >
         {child.get('name')}
       </div>
@@ -40,7 +41,7 @@ function renderLibrary(libraryRoot, active, toggle, addToPlayList) {
 }
 
 export default ({ root, toggle, addToPlayList, active, changeActive }) =>
-  <div className={"library-view"}>
+  <div className="library-view">
     <div className="library-tabs">
       {renderTabs(root, active, changeActive)}
     </div>

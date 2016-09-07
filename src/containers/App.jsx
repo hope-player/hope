@@ -17,29 +17,23 @@ function App({
   play, playNext, playPrevious, pause, resume, timeChanged, changeActive
 }) {
   return (
-    <div className="fill-screen">
+    <div className="container-fluid">
       <div className="main">
-        <div>
-          <LibraryView
-            root={library.get('sources')}
-            toggle={toggle}
-            addToPlayList={addToPlayList}
-            active={library.get('active')}
-            changeActive={changeActive}
-          />
-        </div>
-        <div>
-          <PlayListView
-            playlist={playlist.get('playlist')}
-            active={playlist.get('active')}
-            play={play}
-          />
-        </div>
-        <div>
-          <InfoView currentTrack={player.get('currentTrack')} />
-        </div>
+        <LibraryView
+          root={library.get('sources')}
+          toggle={toggle}
+          addToPlayList={addToPlayList}
+          active={library.get('active')}
+          changeActive={changeActive}
+        />
+        <PlayListView
+          playlist={playlist.get('playlist')}
+          active={playlist.get('active')}
+          play={play}
+        />
+        <InfoView currentTrack={player.get('currentTrack')} />
       </div>
-      <div>
+      <div className="footer">
         <PlayerView
           playerState={player.get('state')}
           duration={player.get('duration')}

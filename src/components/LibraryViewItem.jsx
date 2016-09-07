@@ -74,8 +74,9 @@ export class LibraryViewItem extends React.Component {
   }
 
   render() {
+    const { node } = this.props;
     return (
-      <div className={"library-view-item"}>
+      <div className={"library-view-item"} key={`lvi_div_${node.get('id')}`}>
         {this.renderHeader()}
         {this.renderChildren()}
       </div>
