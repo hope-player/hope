@@ -46,4 +46,4 @@ render(
       <App />
     </div>
   </Provider>
-  , document.getElementById('container'));
+  , document.getElementById('app'));

@@ -41,7 +41,8 @@ function updateLibrary(state, path, data) {
           });
         })
       ).set('expanded', true)
-    );
+    )
+      .set('lastId', lastId);
   });
 }
 

@@ -1,10 +1,4 @@
-const electron = require('electron');
-
-// Module to control application life.
-const { app } = electron;
-// Module to create native browser window.
-const { BrowserWindow } = electron;
-
+const { app, BrowserWindow } = require('electron');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -29,7 +23,6 @@ function createWindow() {
     // when you should delete the corresponding element.
     win = null;
   });
-
 }
 
 // This method will be called when Electron has finished
