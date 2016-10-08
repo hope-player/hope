@@ -1,7 +1,7 @@
 @import "variables";
 @import "scrollbar";
 @import "icons";
-@import "node_modules/bootstrap/scss/bootstrap";
+@import "node_modules/bootstrap/scss/bootstrap.scss";
 
 html, body, #app, .container-fluid {
   width: 100vw;
@@ -104,12 +104,14 @@ html, body, #app, .container-fluid {
 
       .player-progress {
         .player-progress-bar {
-          background-color: $gray-lightest;
-          height: 100%;
-          border-right: 10px solid $brand-primary;
-          transition: width 5s linear;
+          .player-progress-bar-slider {
+            transition: x 1s;
+          }
+          .player-progress-bar-background {
+            transition: width 1s;
+          }
         }
-        height: 15px;
+        height: 25px;
         width: calc(100vw - #{$player-controls-width} - 15px);
         background-color: $gray;
         margin-top: 15px;

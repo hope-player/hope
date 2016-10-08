@@ -11,12 +11,12 @@ export default class PlayListViewsItem extends React.Component {
     this.props.play(this.props.track, this.props.index);
   }
 
-  render() : React.Element {
+  render() {
     const { track, active } = this.props;
 
     let className = 'playlist-view-item';
     if (active) {
-      className = 'playlist-view-item active';
+      className = 'playlist-view-item table-active';
     }
 
     return (
