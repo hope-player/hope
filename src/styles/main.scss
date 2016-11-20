@@ -105,10 +105,8 @@ html, body, #app, .container-fluid {
       .player-progress {
         .player-progress-bar {
           .player-progress-bar-slider {
-            transition: x 1s;
           }
           .player-progress-bar-background {
-            transition: width 1s;
           }
         }
         height: 25px;
